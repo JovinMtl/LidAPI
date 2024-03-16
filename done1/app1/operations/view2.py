@@ -544,8 +544,14 @@ class PrincipalOperations(viewsets.ViewSet):
     @action(methods=['post'], detail=False)
     def receiveDepot(self, request):
         # request.data or request body
-        bordereau = request.data.bordereau
+        # bordereau = request.data.bordereau
+        dataSent = request.data
+        bordereau = dataSent.get('bordereau')
         print("The things you sent are: ", request.data)
+        print("The first element is : ", dir(dataSent))
+        print("Now the first is : ", bordereau)
         newDepot = DepotPreuve.objects.create(bordereau=bordereau)
+        newDepot.currency = dataSent.get('currency')
+        newDepot.save()
         return JsonResponse({"C'est": "bon"})
         pass
