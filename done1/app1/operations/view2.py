@@ -543,5 +543,7 @@ class PrincipalOperations(viewsets.ViewSet):
 
     @action(methods=['post'], detail=False)
     def receiveDepot(self, request):
-        print("The things you set are: ", request.body)
+        # request.data or request body
+        print("The things you sent are: ", request.data)
+        return JsonResponse({"C'est": "bon"})
         pass
