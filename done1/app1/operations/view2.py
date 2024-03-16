@@ -555,3 +555,8 @@ class PrincipalOperations(viewsets.ViewSet):
         newDepot.save()
         return JsonResponse({"C'est": "bon"})
         pass
+
+    @action(methods=['get'], detail=False)
+    def getBordereau(self, request):
+        depot = DepotPreuve.objects.last()
+        return JsonResponse({"The link :": f"http://10.10.12.146:8002{depot.get_bordereau_url()}"}, safe=False)

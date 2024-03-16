@@ -14,6 +14,9 @@ class ConsumePrincipal:
         response = requests.post(url=self.url, data=self.user)
         print("la reponse est : ", response)
         return 0
+    
+    def getBordereauUrl(self):
+        response = requests.get()
 
 
 jove = ConsumePrincipal()
