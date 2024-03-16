@@ -91,5 +91,5 @@ class DepotPreuve(models.Model):
     montant = models.IntegerField(help_text="Le montant que vous deposez",\
                                   default=0)
     bordereau = models.ImageField(upload_to='depots/')
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    # owner = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(default=datetime.now())

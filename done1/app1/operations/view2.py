@@ -19,7 +19,7 @@ import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
-                    Trade
+                    Trade, DepotPreuve
 
 from ..lumi.client_Lumi import LumiRequest 
 from ..lumi.login import UserBrowising
@@ -544,6 +544,8 @@ class PrincipalOperations(viewsets.ViewSet):
     @action(methods=['post'], detail=False)
     def receiveDepot(self, request):
         # request.data or request body
+        bordereau = request.data.bordereau
         print("The things you sent are: ", request.data)
+        newDepot = DepotPreuve.objects.create(bordereau=bordereau)
         return JsonResponse({"C'est": "bon"})
         pass
