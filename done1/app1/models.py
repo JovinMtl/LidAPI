@@ -93,3 +93,12 @@ class DepotPreuve(models.Model):
     bordereau = models.ImageField(upload_to='depots/')
     # owner = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(default=datetime.now())
+
+    def __str__(self) -> str:
+        return str(f"{self.currency}, {self.montant}")
+    
+    def get_bordereau_url(self):
+        if self.bordereau:
+            return self.bordereau.url
+        else:
+            return ''
