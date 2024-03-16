@@ -11,7 +11,7 @@ from .users import injira, check_user_authenticated,\
       userTime
 from .operations.view1 import UserMan, UserViewSet
 from .operations.view2 import RequeWithdrwawViewSet, ManageUser,\
-                                UserManViewset
+                                UserManViewset, PrincipalOperations,
 
 
 # user_list = UserViewSet.as_view({'get': 'list'})
@@ -21,6 +21,7 @@ router = DefaultRouter()
 router.register(r'api/users/', UserViewSet, basename='userrr')
 router.register(r'api/reque', RequeWithdrwawViewSet, basename='req')
 router.register(r'api/userquery', UserManViewset, basename='about-user')
+router.register(r'api/principal', PrincipalOperations, basename='main')
 # router.register(r'api/reque/', RequeViewSet, basename='reque' )
 
 urlpatterns = [
