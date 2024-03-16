@@ -11,7 +11,7 @@ from .users import injira, check_user_authenticated,\
       userTime
 from .operations.view1 import UserMan, UserViewSet
 from .operations.view2 import RequeWithdrwawViewSet, ManageUser,\
-                                UserManViewset, PrincipalOperations,
+                                UserManViewset, PrincipalOperations
 
 
 # user_list = UserViewSet.as_view({'get': 'list'})
