@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 
@@ -95,10 +96,24 @@ class DepotPreuve(models.Model):
     date = models.DateTimeField(default=datetime.now())
 
     def __str__(self) -> str:
-        return str(f"{self.currency}, {self.montant}")
+        return str(f"Depot ({self.currency}), {self.montant}")
     
     def get_bordereau_url(self):
         if self.bordereau:
             return self.bordereau.url
         else:
             return ''
+
+
+class RetraitLives(models.Model):
+    currency = models.CharField(max_length=10, default="null")
+    numero = models.CharField(max_length=25, default="numerovide")
+    benefitor = models.CharField(max_length=25, default="nulldeposant")
+    montant = models.IntegerField(help_text="Le montant que vous deposez",\
+                                  default=0)
+    date_submitted = models.DateTimeField(default=timezone.now())
+    date_approved = models.DateTimeField(default=timezone.now())
+    # owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return str(f"Retrait ({self.currency}), {self.montant}")
