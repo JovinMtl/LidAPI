@@ -138,7 +138,8 @@ class InvestmentsMade(models.Model):
     date_submitted = models.DateTimeField(default=timezone.now())
     date_approved = models.DateTimeField(default=timezone.now())
     # who_approved = models.ForeignKeymodels.ForeignKey(User, on_delete=models.CASCADE)
-    link_to_activate = models.CharField(max_length=50)
+    link_to_approve = models.CharField(max_length=50, \
+                                        default='http://127.0.0.1:8002/jov/api/')
     approved = models.BooleanField(default=False)
 
 

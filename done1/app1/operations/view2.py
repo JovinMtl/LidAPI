@@ -600,13 +600,16 @@ class InvestmentsOperations(viewsets.ViewSet):
         newInvestment.duree = int(dataSent.get('duree'))
         newInvestment.interest = float((newInvestment.taux/100) * newInvestment.capital * (newInvestment.duree/12))
         newInvestment.result = newInvestment.capital + newInvestment.interest
+        link = f"http://localhost:8002/jov/api/invest/{newInvestment.id}/approveInvest/"
+        newInvestment.link_to_approve = link
         newInvestment.date_submitted = timezone.now()
         newInvestment.save()
         return JsonResponse({"Things are ": "well"})
     
-    @action(methods=['get'], detail=False,\
+    @action(methods=['get'], detail=True,\
              permission_classes= [IsAuthenticated])
-    def approveInvest(self, request, pk):
+    def approveInvest(self,request, pk):
         selected_investment = InvestmentsMade.objects.get(pk=pk)
-        print("The selected investment is : ", selected_investment)
+        print("The selected investment is : ", selected_investment,\
+              request)
         return JsonResponse({"The things are well ": "terminated"})
