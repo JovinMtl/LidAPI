@@ -110,7 +110,7 @@ class RetraitLives(models.Model):
     currency = models.CharField(max_length=10, default="null")
     numero = models.CharField(max_length=25, default="numerovide")
     benefitor = models.CharField(max_length=25, default="nulldeposant")
-    montant = models.IntegerField(help_text="Le montant que vous deposez",\
+    montant = models.IntegerField(help_text="Le montant que vous Retirer",\
                                   default=0)
     date_submitted = models.DateTimeField(default=timezone.now())
     date_approved = models.DateTimeField(default=timezone.now())
@@ -121,3 +121,16 @@ class RetraitLives(models.Model):
     def __str__(self) -> str:
         return str(f"Retrait  {self.montant}({self.currency}), \
                    {self.benefitor}, {str(self.date_submitted)[:16]}.")
+
+
+class InvestmentsMade(models.Model):
+    currency = models.CharField(max_length=10, default="null")
+    capital = models.IntegerField(help_text="Le montant que vous voulez \
+                                  investir", default=0)
+    taux = models.FloatField(help_text="Le taux d'interet annuel",\
+                              default=0)
+    duree = models.IntegerField(help_text="Le duree que vous devez \
+                                  attendre", default=0)
+    result = models.IntegerField(help_text="Le montant que vous aurez \
+                                  investir", default=0)
+    # interest = (taux / 100) * capital.value * (duree/12) //simple
