@@ -23,7 +23,7 @@ import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
-                    Trade, DepotPreuve, RetraitLives
+                    Trade, DepotPreuve, RetraitLives, InvestmentsMade
 
 from ..lumi.client_Lumi import LumiRequest 
 from ..lumi.login import UserBrowising
@@ -580,4 +580,20 @@ class RetraitOperations(viewsets.ViewSet):
         newRetrait.montant = int(dataSent.get('montant'))
         newRetrait.date_submitted = timezone.now()
         newRetrait.save()
+        return JsonResponse({"Things are ": "well"})
+
+class InvestmentsMade(viewsets.ViewSet):
+    @action(methods=['post'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def receiveRetrait(self, request):
+        # parser_classes = [MultiPartParser]
+        dataSent = request.data
+        newInvestment = InvestmentsMade.objects.create()
+        newInvestment.currency = dataSent.get('currency')
+        newInvestment.capital = dataSent.get('capital')
+        newInvestment.taux = dataSent.get('taux')
+        newInvestment.duree = int(dataSent.get('duree'))
+        newInvestment.result = float((newInvestment.taux/100) * newInvestment.capital * (newInvestment.duree/12))
+        newInvestment.date_submitted = timezone.now()
+        newInvestment.save()
         return JsonResponse({"Things are ": "well"})
