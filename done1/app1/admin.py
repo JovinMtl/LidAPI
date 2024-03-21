@@ -5,7 +5,9 @@ from .models import Person, Requeste, PorteFeuille, Recharge, Differente,\
 
 
 # Changing the Panel name
-admin.site.site_header = "'Lit Dinar' All Power Panel  ---  (iyi ni Danger zone)"
+new_name = "'Lit Dinar' All Power Panel  ---  (iyi ni Danger zone)"
+admin.site.site_header = new_name
+
 
 # Register your models here.
 

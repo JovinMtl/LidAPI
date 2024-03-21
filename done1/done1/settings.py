@@ -120,7 +120,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = "en-us"
 
 # TIME_ZONE = "UTC"
-TIME_ZONE = 'Etc/GMT-2'
+# TIME_ZONE = 'Etc/GMT-2'
+TIME_ZONE = 'Africa/Cairo'
 
 USE_I18N = True
 
@@ -146,6 +147,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # ]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_HEADERS = [
+#     # Add any other headers you need
+#     'boundary',
+#     # Ensure other headers are also listed here if required
+# ]
 
 
 REST_FRAMEWORK = {

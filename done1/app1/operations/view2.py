@@ -4,6 +4,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser
+
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -552,6 +555,7 @@ class PrincipalOperations(viewsets.ViewSet):
         print("The first element is : ", dir(dataSent))
         print("Now the first is : ", bordereau)
         newDepot = DepotPreuve.objects.create(bordereau=bordereau)
+        newDepot.date = datetime.now()
         newDepot.currency = dataSent.get('currency')
         newDepot.save()
         return JsonResponse({"C'est": "bon"})
@@ -564,16 +568,16 @@ class PrincipalOperations(viewsets.ViewSet):
 
 
 class RetraitOperations(viewsets.ViewSet):
-    @action(methods=['post'], detail=False)
+    @action(methods=['post'], detail=False,\
+             permission_classes= [IsAuthenticated])
     def receiveRetrait(self, request):
+        # parser_classes = [MultiPartParser]
         dataSent = request.data
         newRetrait = RetraitLives.objects.create()
         newRetrait.currency = dataSent.get('currency')
         newRetrait.numero = dataSent.get('numero')
         newRetrait.benefitor = dataSent.get('benefitor')
         newRetrait.montant = int(dataSent.get('montant'))
-        print("The received montat is : ", dataSent.get('montant'))
         newRetrait.date_submitted = timezone.now()
         newRetrait.save()
-        # currency = dataSent.get('')
         return JsonResponse({"Things are ": "well"})

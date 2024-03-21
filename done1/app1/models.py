@@ -93,10 +93,11 @@ class DepotPreuve(models.Model):
                                   default=0)
     bordereau = models.ImageField(upload_to='depots/')
     # owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(default=timezone.now())
 
     def __str__(self) -> str:
-        return str(f"Depot ({self.currency}), {self.montant}")
+        return str(f"Depot  {self.montant}({self.currency}), \
+                   {self.deposant}, {str(self.date)[:16]}.")
     
     def get_bordereau_url(self):
         if self.bordereau:
@@ -113,7 +114,7 @@ class RetraitLives(models.Model):
                                   default=0)
     date_submitted = models.DateTimeField(default=timezone.now())
     date_approved = models.DateTimeField(default=timezone.now())
-    link_to_approve = models.linkfield
+    # link_to_approve = models.linkfield
     # who_approved = models.ForeignKeymodels.ForeignKey(User, on_delete=models.CASCADE)
     # owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
