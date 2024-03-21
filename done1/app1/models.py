@@ -134,3 +134,9 @@ class InvestmentsMade(models.Model):
     result = models.IntegerField(help_text="Le montant que vous aurez \
                                   investir", default=0)
     # interest = (taux / 100) * capital.value * (duree/12) //simple
+    date_submitted = models.DateTimeField(default=timezone.now())
+
+
+    def __str__(self) -> str:
+        return str(f"Depot  {self.capital}({self.currency}), \
+                   {self.duree}, {str(self.date)[:16]}.")
