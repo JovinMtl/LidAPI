@@ -131,12 +131,15 @@ class InvestmentsMade(models.Model):
                               default=0)
     duree = models.IntegerField(help_text="Le duree que vous devez \
                                   attendre", default=0)
+    interest = models.IntegerField(help_text="votre benefice", default=0)
     result = models.IntegerField(help_text="Le montant que vous aurez \
                                   investir", default=0)
     # interest = (taux / 100) * capital.value * (duree/12) //simple
     date_submitted = models.DateTimeField(default=timezone.now())
+    date_approved = models.DateTimeField(default=timezone.now())
+    approved = models.BooleanField(default=Falsea)
 
 
     def __str__(self) -> str:
-        return str(f"Depot  {self.capital}({self.currency}), \
-                   {self.duree}, {str(self.date)[:16]}.")
+        return str(f"Invest  {self.capital}({self.currency}), \
+                   {self.duree}mois,{self.interest}, {str(self.date_submitted)[:16]}.")

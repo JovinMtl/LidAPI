@@ -589,11 +589,12 @@ class InvestmentsOperations(viewsets.ViewSet):
         # parser_classes = [MultiPartParser]
         dataSent = request.data
         newInvestment = InvestmentsMade.objects.create()
-        newInvestment.currency = dataSent.get('currency')
-        newInvestment.capital = dataSent.get('capital')
-        newInvestment.taux = dataSent.get('taux')
+        newInvestment.currency = str(dataSent.get('currency'))
+        newInvestment.capital = int(dataSent.get('capital'))
+        newInvestment.taux = float(dataSent.get('taux'))
         newInvestment.duree = int(dataSent.get('duree'))
-        newInvestment.result = float((newInvestment.taux/100) * newInvestment.capital * (newInvestment.duree/12))
+        newInvestment.interest = float((newInvestment.taux/100) * newInvestment.capital * (newInvestment.duree/12))
+        newInvestment.result = newInvestment.capital + newInvestment.interest
         newInvestment.date_submitted = timezone.now()
         newInvestment.save()
         return JsonResponse({"Things are ": "well"})
