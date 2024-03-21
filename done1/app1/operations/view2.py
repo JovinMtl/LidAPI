@@ -582,10 +582,10 @@ class RetraitOperations(viewsets.ViewSet):
         newRetrait.save()
         return JsonResponse({"Things are ": "well"})
 
-class InvestmentsMade(viewsets.ViewSet):
+class InvestmentsOperations(viewsets.ViewSet):
     @action(methods=['post'], detail=False,\
              permission_classes= [IsAuthenticated])
-    def receiveRetrait(self, request):
+    def receiveInvests(self, request):
         # parser_classes = [MultiPartParser]
         dataSent = request.data
         newInvestment = InvestmentsMade.objects.create()
