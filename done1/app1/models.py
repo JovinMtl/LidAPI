@@ -137,7 +137,7 @@ class InvestmentsMade(models.Model):
     # interest = (taux / 100) * capital.value * (duree/12) //simple
     date_submitted = models.DateTimeField(default=timezone.now())
     date_approved = models.DateTimeField(default=timezone.now())
-    approved = models.BooleanField(default=Falsea)
+    approved = models.BooleanField(default=False)
 
 
     def __str__(self) -> str:
