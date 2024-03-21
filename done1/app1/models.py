@@ -137,9 +137,10 @@ class InvestmentsMade(models.Model):
     # interest = (taux / 100) * capital.value * (duree/12) //simple
     date_submitted = models.DateTimeField(default=timezone.now())
     date_approved = models.DateTimeField(default=timezone.now())
+    # who_approved = models.ForeignKeymodels.ForeignKey(User, on_delete=models.CASCADE)
     approved = models.BooleanField(default=False)
 
 
     def __str__(self) -> str:
-        return str(f"Invest  {self.capital}({self.currency}), \
+        return str(f"Invest({self.approved})  {self.capital}({self.currency}), \
                    {self.duree}mois,{self.interest}, {str(self.date_submitted)[:16]}.")
