@@ -113,6 +113,7 @@ class RetraitLives(models.Model):
                                   default=0)
     date_submitted = models.DateTimeField(default=timezone.now())
     date_approved = models.DateTimeField(default=timezone.now())
+    # who_approved = models.ForeignKeymodels.ForeignKey(User, on_delete=models.CASCADE)
     # owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
