@@ -567,6 +567,8 @@ class PrincipalOperations(viewsets.ViewSet):
         return JsonResponse({"The link :": f"http://10.10.12.146:8002{depot.get_bordereau_url()}"}, safe=False)
 
 
+
+
 class RetraitOperations(viewsets.ViewSet):
     @action(methods=['post'], detail=False,\
              permission_classes= [IsAuthenticated])
@@ -581,6 +583,9 @@ class RetraitOperations(viewsets.ViewSet):
         newRetrait.date_submitted = timezone.now()
         newRetrait.save()
         return JsonResponse({"Things are ": "well"})
+    
+
+
 
 class InvestmentsOperations(viewsets.ViewSet):
     @action(methods=['post'], detail=False,\
@@ -598,3 +603,10 @@ class InvestmentsOperations(viewsets.ViewSet):
         newInvestment.date_submitted = timezone.now()
         newInvestment.save()
         return JsonResponse({"Things are ": "well"})
+    
+    @action(methods=['get'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def approveInvest(self, request, pk):
+        selected_investment = InvestmentsMade.objects.get(pk=pk)
+        print("The selected investment is : ", selected_investment)
+        return JsonResponse({"The things are well ": "terminated"})
