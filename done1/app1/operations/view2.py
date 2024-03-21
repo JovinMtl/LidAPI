@@ -14,12 +14,13 @@ from django.contrib.auth.models import User
 from django.http import request as requeste
 # from django.db.models.query import QuerySet.DoesNotExist
 from datetime import datetime
+from django.utils import timezone
 from functools import wraps
 import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
-                    Trade, DepotPreuve
+                    Trade, DepotPreuve, RetraitLives
 
 from ..lumi.client_Lumi import LumiRequest 
 from ..lumi.login import UserBrowising
@@ -560,3 +561,19 @@ class PrincipalOperations(viewsets.ViewSet):
     def getBordereau(self, request):
         depot = DepotPreuve.objects.last()
         return JsonResponse({"The link :": f"http://10.10.12.146:8002{depot.get_bordereau_url()}"}, safe=False)
+
+
+class RetraitOperations(viewsets.ViewSet):
+    @action(methods=['post'], detail=False)
+    def receiveRetrait(self, request):
+        dataSent = request.data
+        newRetrait = RetraitLives.objects.create()
+        newRetrait.currency = dataSent.get('currency')
+        newRetrait.numero = dataSent.get('numero')
+        newRetrait.benefitor = dataSent.get('benefitor')
+        newRetrait.montant = int(dataSent.get('montant'))
+        print("The received montat is : ", dataSent.get('montant'))
+        newRetrait.date_submitted = timezone.now()
+        newRetrait.save()
+        # currency = dataSent.get('')
+        return JsonResponse({"Things are ": "well"})
