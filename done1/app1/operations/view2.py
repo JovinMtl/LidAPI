@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 # from django.dispatch import receiver
 # from django.db.models.signals import post_save
 # from rest_framework.authtoken.models import Token
@@ -593,7 +594,12 @@ class InvestmentsOperations(viewsets.ViewSet):
     def receiveInvests(self, request):
         # parser_classes = [MultiPartParser]
         dataSent = request.data
-        newInvestment = InvestmentsMade.objects.create()
+        # owner = User.objects.get(username=request.user)
+        owner = get_object_or_404(User, username=request.user)
+        # newInvestment = InvestmentsMade.objects.create(owner_id=owner.id)
+        newInvestment = InvestmentsMade()
+        newInvestment.owner = owner
+        # newInvestment.who_approved = owner
         newInvestment.currency = str(dataSent.get('currency'))
         newInvestment.capital = int(dataSent.get('capital'))
         newInvestment.taux = float(dataSent.get('taux'))
@@ -603,6 +609,8 @@ class InvestmentsOperations(viewsets.ViewSet):
         link = f"http://localhost:8002/jov/api/invest/{newInvestment.id}/approveInvest/"
         newInvestment.link_to_approve = link
         newInvestment.date_submitted = timezone.now()
+        # newInvestment.owner = owner
+        print("THe owner is : ", type(owner))
         newInvestment.save()
         return JsonResponse({"Things are ": "well"})
     
@@ -610,6 +618,18 @@ class InvestmentsOperations(viewsets.ViewSet):
              permission_classes= [IsAuthenticated])
     def approveInvest(self,request, pk):
         selected_investment = InvestmentsMade.objects.get(pk=pk)
-        print("The selected investment is : ", selected_investment,\
-              request)
+        if not selected_investment.approved:
+            selected_investment.approved = True
+            selected_investment.date_approved = timezone.now()
+            print("The sender is : ", request.user)
+            # print("The selected investment is : ", selected_investment,\
+                #   request)
+            selected_investment.save()
+        else:
+            return JsonResponse({"This link is ": "used up"})
         return JsonResponse({"The things are well ": "terminated"})
+    
+    @action(methods=['post'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def allInvests(self, request):
+        pass

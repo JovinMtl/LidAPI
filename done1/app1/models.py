@@ -124,6 +124,7 @@ class RetraitLives(models.Model):
 
 
 class InvestmentsMade(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     currency = models.CharField(max_length=10, default="null")
     capital = models.IntegerField(help_text="Le montant que vous voulez \
                                   investir", default=0)
@@ -135,10 +136,13 @@ class InvestmentsMade(models.Model):
     result = models.IntegerField(help_text="Le montant que vous aurez \
                                   investir", default=0)
     # interest = (taux / 100) * capital.value * (duree/12) //simple
-    date_submitted = models.DateTimeField(default=timezone.now())
-    date_approved = models.DateTimeField(default=timezone.now())
-    # who_approved = models.ForeignKeymodels.ForeignKey(User, on_delete=models.CASCADE)
-    link_to_approve = models.CharField(max_length=50, \
+    date_submitted = models.DateTimeField(default=datetime.now())
+    date_approved = models.DateTimeField(default=datetime.now())
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, \
+                              related_name="The_one_who_initiated")
+    # who_approved = models.ForeignKey(User, on_delete=models.CASCADE, \
+    #                           related_name="The_one_who_authorized_this")
+    link_to_approve = models.URLField(max_length=50, \
                                         default='http://127.0.0.1:8002/jov/api/')
     approved = models.BooleanField(default=False)
 
