@@ -138,8 +138,10 @@ class InvestmentsMade(models.Model):
     # interest = (taux / 100) * capital.value * (duree/12) //simple
     date_submitted = models.DateTimeField(default=datetime.now())
     date_approved = models.DateTimeField(default=datetime.now())
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, \
-                              related_name="The_one_who_initiated")
+    # owner = models.ForeignKey(User, on_delete=models.CASCADE, \
+    #                           related_name="The_one_who_initiated")
+    owner = models.CharField(max_length=10, default="null")
+    who_approved = models.CharField(max_length=10, default="null")
     # who_approved = models.ForeignKey(User, on_delete=models.CASCADE, \
     #                           related_name="The_one_who_authorized_this")
     link_to_approve = models.URLField(max_length=50, \
