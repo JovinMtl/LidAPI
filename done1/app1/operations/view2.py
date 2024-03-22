@@ -594,11 +594,11 @@ class InvestmentsOperations(viewsets.ViewSet):
     def receiveInvests(self, request):
         # parser_classes = [MultiPartParser]
         dataSent = request.data
-        # owner = User.objects.get(username=request.user)
-        owner = get_object_or_404(User, username=request.user)
+        owner = User.objects.get(username=request.user)
+        # owner = get_object_or_404(User, username=request.user)
         newInvestment = InvestmentsMade.objects.create(owner_id=owner.id)
         # newInvestment = InvestmentsMade()
-        newInvestment.owner = owner
+        newInvestment.owner = owner.username
         # newInvestment.who_approved = owner
         newInvestment.currency = str(dataSent.get('currency'))
         newInvestment.capital = int(dataSent.get('capital'))
