@@ -23,6 +23,7 @@ from functools import wraps
 import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
+from ..serializers import InveSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade
 
