@@ -611,7 +611,7 @@ class InvestmentsOperations(viewsets.ViewSet):
         newInvestment.link_to_approve = link
         newInvestment.date_submitted = timezone.now()
         # newInvestment.owner = owner
-        print("THe owner is : ", type(owner))
+        # print("THe owner is : ", type(owner))
         newInvestment.save()
         return JsonResponse({"Things are ": "well"})
     
@@ -638,8 +638,8 @@ class InvestmentsOperations(viewsets.ViewSet):
         inve_serializer = InveSeria(inve, many=True)
 
         if inve_serializer.is_valid:
-            pass
-            # return Response(inve_serializer.data)
+            # pass
+            return Response(inve_serializer.data)
         
         return JsonResponse({"The things are ": inve_serializer.data})
     
@@ -655,7 +655,7 @@ class InvestmentsOperations(viewsets.ViewSet):
         
         return JsonResponse({"The things are ": inve_serializer.data})
     
-    
+
     @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
     def needInvests(self, request):
@@ -663,7 +663,8 @@ class InvestmentsOperations(viewsets.ViewSet):
         inve_serializer = InveSeria(inve, many=True)
 
         if inve_serializer.is_valid:
-            pass
-            # return Response(inve_serializer.data)
+            # pass
+            return Response(inve_serializer.data)
         
-        return JsonResponse({"The things are ": inve_serializer.data})
+        return Response(inve_serializer.data)
+        # return JsonResponse({"The things are ": inve_serializer.data})
