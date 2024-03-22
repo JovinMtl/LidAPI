@@ -631,7 +631,39 @@ class InvestmentsOperations(viewsets.ViewSet):
             return JsonResponse({"This link is ": "used up"})
         return JsonResponse({"The things are well ": "terminated"})
     
-    @action(methods=['post'], detail=False,\
+    @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
     def allInvests(self, request):
-        jove = InvestmentsMade.objects.all()
+        inve = InvestmentsMade.objects.all()
+        inve_serializer = InveSeria(inve, many=True)
+
+        if inve_serializer.is_valid:
+            pass
+            # return Response(inve_serializer.data)
+        
+        return JsonResponse({"The things are ": inve_serializer.data})
+    
+    @action(methods=['get'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def doneInvests(self, request):
+        inve = InvestmentsMade.objects.filter(approved=True)
+        inve_serializer = InveSeria(inve, many=True)
+
+        if inve_serializer.is_valid:
+            pass
+            # return Response(inve_serializer.data)
+        
+        return JsonResponse({"The things are ": inve_serializer.data})
+    
+    
+    @action(methods=['get'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def needInvests(self, request):
+        inve = InvestmentsMade.objects.filter(approved=False)
+        inve_serializer = InveSeria(inve, many=True)
+
+        if inve_serializer.is_valid:
+            pass
+            # return Response(inve_serializer.data)
+        
+        return JsonResponse({"The things are ": inve_serializer.data})
