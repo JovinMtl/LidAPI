@@ -596,8 +596,8 @@ class InvestmentsOperations(viewsets.ViewSet):
         dataSent = request.data
         # owner = User.objects.get(username=request.user)
         owner = get_object_or_404(User, username=request.user)
-        # newInvestment = InvestmentsMade.objects.create(owner_id=owner.id)
-        newInvestment = InvestmentsMade()
+        newInvestment = InvestmentsMade.objects.create(owner_id=owner.id)
+        # newInvestment = InvestmentsMade()
         newInvestment.owner = owner
         # newInvestment.who_approved = owner
         newInvestment.currency = str(dataSent.get('currency'))
