@@ -620,6 +620,7 @@ class InvestmentsOperations(viewsets.ViewSet):
         selected_investment = InvestmentsMade.objects.get(pk=pk)
         if not selected_investment.approved:
             selected_investment.approved = True
+            selected_investment.who_approved = str(request.user)
             selected_investment.date_approved = timezone.now()
             print("The sender is : ", request.user)
             # print("The selected investment is : ", selected_investment,\
@@ -632,4 +633,4 @@ class InvestmentsOperations(viewsets.ViewSet):
     @action(methods=['post'], detail=False,\
              permission_classes= [IsAuthenticated])
     def allInvests(self, request):
-        pass
+        jove = InvestmentsMade.objects.all()
