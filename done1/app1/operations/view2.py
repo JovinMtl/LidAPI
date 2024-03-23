@@ -650,10 +650,11 @@ class InvestmentsOperations(viewsets.ViewSet):
         inve_serializer = InveSeria(inve, many=True)
 
         if inve_serializer.is_valid:
-            pass
-            # return Response(inve_serializer.data)
+            # pass
+            return Response(inve_serializer.data)
         
-        return JsonResponse({"The things are ": inve_serializer.data})
+        return Response(inve_serializer.data)
+        # return JsonResponse({"The things are ": inve_serializer.data})
     
 
     @action(methods=['get'], detail=False,\
