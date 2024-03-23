@@ -98,13 +98,13 @@ class DepotPreuve(models.Model):
     who_approved = models.CharField(max_length=10, default="null")
     date_submitted = models.DateTimeField(default=datetime.now())
     link_to_approve = models.URLField(max_length=50, \
-                                        default='http://127.0.0.1:8002/jov/api/')
+                default="http://localhost:8002/jov/api/depot/4/approveDepot/")
     date_approved = models.DateTimeField(default=datetime.now())
     approved = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return str(f"Depot {self.id} , {self.montant}({self.currency}), \
-                   {self.deposant}, {str(self.date)[:16]}.")
+        return str(f"Depot {self.id} ({self.approved}) , {self.montant}({self.currency}), \
+                   {self.deposant}, {str(self.date_submitted)[:16]}.")
     
     def get_bordereau_url(self):
         if self.bordereau:
