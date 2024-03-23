@@ -549,8 +549,6 @@ class DepotOperations(viewsets.ViewSet):
 
     @action(methods=['post'], detail=False)
     def receiveDepot(self, request):
-        # request.data or request body
-        # bordereau = request.data.bordereau
         dataSent = request.data
         bordereau = dataSent.get('bordereau')
         print("The things you sent are: ", request.data)
@@ -563,9 +561,9 @@ class DepotOperations(viewsets.ViewSet):
         return JsonResponse({"C'est": "bon"})
         pass
 
-    @action(methods=['get'], detail=False)
-    def getBordereau(self, request):
-        depot = DepotPreuve.objects.last()
+    @action(methods=['get'], detail=True)
+    def getBordereau(self, request, pk):
+        depot = DepotPreuve.objects.get(pk=pk)
         return JsonResponse({"The link :": f"http://10.10.12.146:8002{depot.get_bordereau_url()}"}, safe=False)
 
 

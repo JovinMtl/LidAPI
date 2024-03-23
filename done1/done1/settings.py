@@ -136,6 +136,10 @@ STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # STATIC_URL = "/home/muteule/Coding/Py_enjoy/Learn_django/static/"
 
+# Media settings example
+MEDIA_URL = 'depots/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'depots/')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
