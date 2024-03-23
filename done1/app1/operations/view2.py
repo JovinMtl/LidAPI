@@ -564,7 +564,8 @@ class DepotOperations(viewsets.ViewSet):
     @action(methods=['get'], detail=True)
     def getBordereau(self, request, pk):
         depot = DepotPreuve.objects.get(pk=pk)
-        return JsonResponse({"The link :": f"http://10.10.12.146:8002{depot.get_bordereau_url()}"}, safe=False)
+        return JsonResponse({"The link :":\
+                         f"http://127.0.0.1:8002{depot.get_bordereau_url()}"}, safe=False)
 
 
 
