@@ -555,11 +555,27 @@ class DepotOperations(viewsets.ViewSet):
         print("The first element is : ", dir(dataSent))
         print("Now the first is : ", bordereau)
         newDepot = DepotPreuve.objects.create(bordereau=bordereau)
-        newDepot.date = datetime.now()
+        newDepot.date_submitted = datetime.now()
+        url = f"http://localhost:8002/jov/api/depot/{newDepot.id}/approveDepot/"
+        newDepot.link_to_approve = url
         newDepot.currency = dataSent.get('currency')
+        newDepot.montant = dataSent.get('montant')
+        newDepot.deposant = dataSent.get('deposant')
+        newDepot.numero = dataSent.get('numero')
+        newDepot.owner = str(request.user)
         newDepot.save()
         return JsonResponse({"C'est": "bon"})
         pass
+
+    @action(methods=['get'], detail=True)
+    def approveDepot(self, request, pk):
+        depot = DepotPreuve.objects.get(pk=pk)
+        depot.approved = True
+        depot.date_approved = timezone.now()
+        depot.who_approved = str(request.user)
+        # doing some operations
+        depot.save()
+        return JsonResponse({"C'est bien": "fait"})
 
     @action(methods=['get'], detail=True)
     def getBordereau(self, request, pk):
