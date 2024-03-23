@@ -12,7 +12,7 @@ from .users import injira, check_user_authenticated,\
 from .operations.view1 import UserMan, UserViewSet
 from .operations.view2 import RequeWithdrwawViewSet, ManageUser,\
                                 UserManViewset
-from .operations.view2 import PrincipalOperations, RetraitOperations, \
+from .operations.view2 import DepotOperations, RetraitOperations, \
                               InvestmentsOperations
 
 
@@ -23,7 +23,7 @@ router = DefaultRouter()
 router.register(r'api/users/', UserViewSet, basename='userrr')
 router.register(r'api/reque', RequeWithdrwawViewSet, basename='req')
 router.register(r'api/userquery', UserManViewset, basename='about-user')
-router.register(r'api/depot', PrincipalOperations, basename='depot')
+router.register(r'api/depot', DepotOperations, basename='depot')
 router.register(r'api/retrait', RetraitOperations, basename='retrait')
 router.register(r'api/invest', InvestmentsOperations, basename='invest')
 # router.register(r'api/reque/', RequeViewSet, basename='reque' )

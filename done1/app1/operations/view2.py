@@ -545,7 +545,7 @@ class UserManViewset(viewsets.ViewSet):
             return JsonResponse({'message': 'User is not authenticated'},\
                                 status=401)
 
-class PrincipalOperations(viewsets.ViewSet):
+class DepotOperations(viewsets.ViewSet):
 
     @action(methods=['post'], detail=False)
     def receiveDepot(self, request):
