@@ -576,6 +576,25 @@ class DepotOperations(viewsets.ViewSet):
         if depo_serializer.is_valid:
             return Response(depo_serializer.data)
         return Response(depo_serializer.data)
+    
+    @action(methods=['get'], detail=False)
+    def getDepotNotDone(self, request):
+        depots = DepotPreuve.objects.filter()
+        depo_serializer = DepoSeria(depots, many=True)
+
+        if depo_serializer.is_valid:
+            return Response(depo_serializer.data)
+        return Response(depo_serializer.data)@action(methods=['get'], detail=False)
+    
+    # def getDepotDone(self, request):
+    #     depots = DepotPreuve.objects.all()
+    #     depo_serializer = DepoSeria(depots, many=True)
+
+    #     if depo_serializer.is_valid:
+    #         return Response(depo_serializer.data)
+    #     return Response(depo_serializer.data)
+    
+
 
 
 

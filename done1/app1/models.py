@@ -93,7 +93,14 @@ class DepotPreuve(models.Model):
                                   default=0)
     bordereau = models.ImageField(upload_to='depots/')
     # owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateTimeField(default=timezone.now())
+
+    owner = models.CharField(max_length=10, default="null")
+    who_approved = models.CharField(max_length=10, default="null")
+    date_submitted = models.DateTimeField(default=datetime.now())
+    link_to_approve = models.URLField(max_length=50, \
+                                        default='http://127.0.0.1:8002/jov/api/')
+    date_approved = models.DateTimeField(default=datetime.now())
+    approved = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return str(f"Depot {self.id} , {self.montant}({self.currency}), \
