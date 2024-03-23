@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from .models import Person, Requeste, PorteFeuille
 
-from .models import InvestmentsMade
+from .models import InvestmentsMade, DepotPreuve
 
 
 
@@ -30,4 +30,9 @@ class PorteSeria(serializers.ModelSerializer):
 class InveSeria(serializers.ModelSerializer):
     class Meta:
         model = InvestmentsMade
+        fields = '__all__'
+
+class DepoSeria(serializers.ModelSerializer):
+    class Meta:
+        model = DepotPreuve
         fields = '__all__'

@@ -23,7 +23,7 @@ from functools import wraps
 import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
-from ..serializers import InveSeria
+from ..serializers import InveSeria, DepoSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade
 
@@ -565,7 +565,13 @@ class DepotOperations(viewsets.ViewSet):
     def getBordereau(self, request, pk):
         depot = DepotPreuve.objects.get(pk=pk)
         return JsonResponse({"The link :":\
-                         f"http://127.0.0.1:8002{depot.get_bordereau_url()}"}, safe=False)
+                         f"http://127.0.0.1:8002{depot.get_bordereau_url()}"},\
+                              safe=False)
+    
+    @action(methods=['get'], detail=False)
+    def getDepotAll(self, request):
+        depots = DepotPreuve.objects.all()
+        depotSeria = 
 
 
 
