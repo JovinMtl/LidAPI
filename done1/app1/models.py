@@ -96,7 +96,7 @@ class DepotPreuve(models.Model):
     date = models.DateTimeField(default=timezone.now())
 
     def __str__(self) -> str:
-        return str(f"Depot  {self.montant}({self.currency}), \
+        return str(f"Depot {self.id} , {self.montant}({self.currency}), \
                    {self.deposant}, {str(self.date)[:16]}.")
     
     def get_bordereau_url(self):
