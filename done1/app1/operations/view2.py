@@ -571,7 +571,12 @@ class DepotOperations(viewsets.ViewSet):
     @action(methods=['get'], detail=False)
     def getDepotAll(self, request):
         depots = DepotPreuve.objects.all()
-        depotSeria = 
+        depo_serializer = DepoSeria(depots, many=True)
+
+        if depo_serializer.is_valid:
+            return Response(depo_serializer.data)
+        return Response(depo_serializer.data)
+
 
 
 
