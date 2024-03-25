@@ -187,4 +187,4 @@ class Solde(models.Model):
                               default=0)
     
     def __str__(self) -> str:
-        return f"Solde en USDT: {self.usdt}."
+        return f"Solde de {self.owner.username} en USDT: {self.usdt}."
