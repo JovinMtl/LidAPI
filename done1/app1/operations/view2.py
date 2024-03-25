@@ -579,7 +579,7 @@ class DepotOperations(viewsets.ViewSet):
         # doing some operations
         owner = depot.owner
         currency = depot.currency
-        actualSoldeObject = Solde.objects.get(owner=owner)
+        actualSoldeObject = Solde.objects.get(owner_username=owner)
         #function that operates on Solde
         self.workOnSolde(company_solde, actualSoldeObject,\
                          depot.montant, currency=currency)
