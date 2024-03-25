@@ -571,23 +571,29 @@ class DepotOperations(viewsets.ViewSet):
 
     @action(methods=['get'], detail=True)
     def approveDepot(self, request, pk):
-        company_solde = Solde.objects.get(pk=1)
+        company_solde = Solde.objects.get(pk=2)
         depot = DepotPreuve.objects.get(pk=pk)
-        depot.approved = True
+        # depot.approved = True
         depot.date_approved = timezone.now()
         depot.who_approved = str(request.user)
         # doing some operations
-        owner = depot.owner
+        owner_username = depot.owner
+        owner = User.objects.get(username = owner_username)
+        owner_id = owner.id
         currency = depot.currency
-        actualSoldeObject = Solde.objects.get(owner_username=owner)
+        # actualSoldeObject = Solde.objects.get(owner_id=1)
+        actualSoldeObject = Solde.objects.get(owner_id=owner_id)
         #function that operates on Solde
         self.workOnSolde(company_solde, actualSoldeObject,\
-                         depot.montant, currency=currency)
+                         depot.montant, currency)
         depot.save()
         return JsonResponse({"C'est bien": "fait"})
     
-    def workOnSolde(source, destination, amount, currency):
+    def workOnSolde(self, source, destination, amount, currency):
+        print("The currency is : ", currency)
         print("The Amount to work on is : ", amount)
+        print("The destination : ", destination)
+        print("The source is : ", source)
         pass
 
     @action(methods=['get'], detail=True)
