@@ -573,7 +573,6 @@ class DepotOperations(viewsets.ViewSet):
     def approveDepot(self, request, pk):
         company_solde = Solde.objects.get(pk=2)
         depot = DepotPreuve.objects.get(pk=pk)
-        # depot.approved = True
         depot.date_approved = timezone.now()
         depot.who_approved = str(request.user)
         # doing some operations
@@ -581,20 +580,35 @@ class DepotOperations(viewsets.ViewSet):
         owner = User.objects.get(username = owner_username)
         owner_id = owner.id
         currency = depot.currency
-        # actualSoldeObject = Solde.objects.get(owner_id=1)
         actualSoldeObject = Solde.objects.get(owner_id=owner_id)
         #function that operates on Solde
-        self.workOnSolde(company_solde, actualSoldeObject,\
+        response = self.workOnSolde(company_solde, actualSoldeObject,\
                          depot.montant, currency)
-        depot.save()
-        return JsonResponse({"C'est bien": "fait"})
+        if response == 200:
+            depot.approved = True
+            depot.save()
+            return JsonResponse({"C'est bien": "fait"})
+        else:
+            return JsonResponse({"C'est mal ": "passe"})
     
     def workOnSolde(self, source, destination, amount, currency):
-        print("The currency is : ", currency)
-        print("The Amount to work on is : ", amount)
-        print("The destination : ", destination)
-        print("The source is : ", source)
-        pass
+        lower_currency = currency.lower()  # is sent from Vue3 in uppercase
+        
+        if amount > 0 and (getattr(source, lower_currency) > amount):
+            source_value = (getattr(source, lower_currency)) - amount
+            destination_value = (getattr(destination, lower_currency)) + amount
+
+            setattr(source, lower_currency, source_value)
+            setattr(destination, lower_currency, destination_value)
+
+            print(f"Attribute of {lower_currency} is set correctly at\
+                   {getattr(destination, lower_currency)} \
+                    which is {destination}")
+            
+            destination.save()
+            return 200
+        else :
+            return 204
 
     @action(methods=['get'], detail=True)
     def getBordereau(self, request, pk):
