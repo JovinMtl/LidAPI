@@ -753,7 +753,7 @@ class SoldeOperations(viewsets.ViewSet):
 
     @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
-    def getSolde(self, request, pk):
+    def getSolde(self, request):
         # owner = User.objects.get(username = request.user.username)
         # owner_id = owner.id
         owner_id = request.user.id
