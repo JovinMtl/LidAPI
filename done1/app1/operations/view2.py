@@ -628,7 +628,7 @@ class DepotOperations(viewsets.ViewSet):
     
     @action(methods=['get'], detail=False)
     def getDepotNotDone(self, request):
-        depots = DepotPreuve.objects.filter(approved=False)
+        depots = DepotPreuve.objects.filter(approved=False)[::-1]
         depo_serializer = DepoSeria(depots, many=True)
 
         if depo_serializer.is_valid:
