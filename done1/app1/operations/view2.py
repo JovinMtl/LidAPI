@@ -23,7 +23,7 @@ from functools import wraps
 import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
-from ..serializers import InveSeria, DepoSeria
+from ..serializers import InveSeria, DepoSeria, SoldeSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
                           Solde
@@ -754,10 +754,11 @@ class SoldeOperations(viewsets.ViewSet):
     @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
     def getSolde(self, request):
-        # owner = User.objects.get(username = request.user.username)
-        # owner_id = owner.id
         owner_id = request.user.id
-        Solde_object = Solde.objects.get(owner_id=owner_id)
-        print(f"The SOlde found is : {Solde_object}")
+        solde_object = Solde.objects.get(owner_id=owner_id)
+        print(f"The SOlde found is : {solde_object}")
+        solde_serializer = SoldeSeria(solde_object)
+        if solde_serializer.is_valid:
+            return Response(solde_serializer.data)
 
         return JsonResponse({"Les choses sont: ": "bien passees"})
