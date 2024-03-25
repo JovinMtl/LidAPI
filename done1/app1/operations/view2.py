@@ -25,7 +25,8 @@ import json
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
 from ..serializers import InveSeria, DepoSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
-                    Trade, DepotPreuve, RetraitLives, InvestmentsMade
+                    Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
+                          Solde
 
 from ..lumi.client_Lumi import LumiRequest 
 from ..lumi.login import UserBrowising
@@ -546,6 +547,7 @@ class UserManViewset(viewsets.ViewSet):
                                 status=401)
 
 class DepotOperations(viewsets.ViewSet):
+    # company_solde = Solde.objects.get(pk=1)
 
     @action(methods=['post'], detail=False)
     def receiveDepot(self, request):
@@ -569,13 +571,24 @@ class DepotOperations(viewsets.ViewSet):
 
     @action(methods=['get'], detail=True)
     def approveDepot(self, request, pk):
+        company_solde = Solde.objects.get(pk=1)
         depot = DepotPreuve.objects.get(pk=pk)
         depot.approved = True
         depot.date_approved = timezone.now()
         depot.who_approved = str(request.user)
         # doing some operations
+        owner = depot.owner
+        currency = depot.currency
+        actualSoldeObject = Solde.objects.get(owner=owner)
+        #function that operates on Solde
+        self.workOnSolde(company_solde, actualSoldeObject,\
+                         depot.montant, currency=currency)
         depot.save()
         return JsonResponse({"C'est bien": "fait"})
+    
+    def workOnSolde(source, destination, amount, currency):
+        print("The Amount to work on is : ", amount)
+        pass
 
     @action(methods=['get'], detail=True)
     def getBordereau(self, request, pk):
@@ -714,4 +727,10 @@ class InvestmentsOperations(viewsets.ViewSet):
             return Response(inve_serializer.data)
         
         return Response(inve_serializer.data)
-        # return JsonResponse({"The things are ": inve_serializer.data})
+
+
+# class SoldeOperations(viewsets.ViewSet):
+
+#     @action(methods=['get'], detail=True,\
+#              permission_classes= [IsAuthenticated])
+#     def getSolde(self, request, pk):
