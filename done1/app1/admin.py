@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import Person, Requeste, PorteFeuille, Recharge, Differente,\
-                    Trade, DepotPreuve, RetraitLives, InvestmentsMade
+                    Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
+                          Solde
 
 
 # Changing the Panel name
@@ -20,3 +21,4 @@ admin.site.register(Trade)
 admin.site.register(DepotPreuve)
 admin.site.register(RetraitLives)
 admin.site.register(InvestmentsMade)
+admin.site.register(Solde)
