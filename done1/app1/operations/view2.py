@@ -586,7 +586,7 @@ class DepotOperations(viewsets.ViewSet):
     
     @action(methods=['get'], detail=False)
     def getDepotAll(self, request):
-        depots = DepotPreuve.objects.all()
+        depots = DepotPreuve.objects.all()[10::-1]
         depo_serializer = DepoSeria(depots, many=True)
 
         if depo_serializer.is_valid:
@@ -595,20 +595,21 @@ class DepotOperations(viewsets.ViewSet):
     
     @action(methods=['get'], detail=False)
     def getDepotNotDone(self, request):
-        depots = DepotPreuve.objects.filter()
+        depots = DepotPreuve.objects.filter(approved=False)
         depo_serializer = DepoSeria(depots, many=True)
 
         if depo_serializer.is_valid:
             return Response(depo_serializer.data)
         return Response(depo_serializer.data)@action(methods=['get'], detail=False)
     
-    # def getDepotDone(self, request):
-    #     depots = DepotPreuve.objects.all()
-    #     depo_serializer = DepoSeria(depots, many=True)
+    @action(methods=['get'], detail=False)
+    def getDepotDone(self, request):
+        depots = DepotPreuve.objects.filter(approved=True)[::-1]
+        depo_serializer = DepoSeria(depots, many=True)
 
-    #     if depo_serializer.is_valid:
-    #         return Response(depo_serializer.data)
-    #     return Response(depo_serializer.data)
+        if depo_serializer.is_valid:
+            return Response(depo_serializer.data)
+        return Response(depo_serializer.data)
     
 
 
