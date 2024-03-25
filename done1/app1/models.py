@@ -158,4 +158,33 @@ class InvestmentsMade(models.Model):
 
     def __str__(self) -> str:
         return str(f"Invest({self.approved})  {self.capital}({self.currency}), \
-                   {self.duree}mois,{self.interest}, {str(self.date_submitted)[:16]}.")
+                   {self.duree}mois,{self.interest},\
+                      {str(self.date_submitted)[:16]}.")
+
+class Solde(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    usdt = models.FloatField(help_text="Le solde actuel en usdt",\
+                              default=0)
+    usd = models.FloatField(help_text="Le solde actuel en US Dollar",\
+                              default=0)
+    bif = models.FloatField(help_text="Le solde actuel en FBU",\
+                              default=0)
+    rwf = models.FloatField(help_text="Le solde actuel en Frw",\
+                              default=0)
+    kes = models.FloatField(help_text="Le solde actuel en ShillingKenya",\
+                              default=0)
+    ugx = models.FloatField(help_text="Le solde actuel en Ugshilling",\
+                              default=0)
+    tsh = models.FloatField(help_text="Le solde actuel en ShillingTanzania",\
+                              default=0)
+    zmw = models.FloatField(help_text="Le solde actuel en Kwacha",\
+                              default=0)
+    eur = models.FloatField(help_text="Le solde actuel en Euro",\
+                              default=0)
+    trx = models.FloatField(help_text="Le solde actuel en TRX",\
+                              default=0)
+    lid = models.FloatField(help_text="Le solde actuel en Lit Dinar",\
+                              default=0)
+    
+    def __str__(self) -> str:
+        return f"Solde en USDT: {self.usdt}."
