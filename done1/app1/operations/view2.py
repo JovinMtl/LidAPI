@@ -749,8 +749,15 @@ class InvestmentsOperations(viewsets.ViewSet):
         return Response(inve_serializer.data)
 
 
-# class SoldeOperations(viewsets.ViewSet):
+class SoldeOperations(viewsets.ViewSet):
 
-#     @action(methods=['get'], detail=True,\
-#              permission_classes= [IsAuthenticated])
-#     def getSolde(self, request, pk):
+    @action(methods=['get'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def getSolde(self, request, pk):
+        # owner = User.objects.get(username = request.user.username)
+        # owner_id = owner.id
+        owner_id = request.user.id
+        Solde_object = Solde.objects.get(owner_id=owner_id)
+        print(f"The SOlde found is : {Solde_object}")
+
+        return JsonResponse({"Les choses sont: ": "bien passees"})
