@@ -765,11 +765,12 @@ class SoldeOperations(viewsets.ViewSet):
 
 
 class Nofications(viewsets.ViewSet):
+    """This is what is the response/message from the Backoffice"""
 
     @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
     def getAll(self, request):
-        notifDepot = DepotPreuve.objects.filter(owner=str(request.user))
+        notifDepot = DepotPreuve.objects.filter(owner=str(request.user)).filter(approved=True)
 
         notifDepot_seria = DepoSeria(notifDepot, many=True)
         
