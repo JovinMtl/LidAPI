@@ -98,7 +98,8 @@ class DepotPreuve(models.Model):
     who_approved = models.CharField(max_length=10, default="null")
     date_submitted = models.DateTimeField(default=datetime.now())
     link_to_approve = models.URLField(max_length=50, \
-                default="http://localhost:8002/jov/api/depot/4/approveDepot/")
+                default="http://localhost:8002/jov/api/depot/4/approveDepot/",\
+                editable=False)
     date_approved = models.DateTimeField(default=datetime.now())
     approved = models.BooleanField(default=False)
 
@@ -152,7 +153,8 @@ class InvestmentsMade(models.Model):
     # who_approved = models.ForeignKey(User, on_delete=models.CASCADE, \
     #                           related_name="The_one_who_authorized_this")
     link_to_approve = models.URLField(max_length=50, \
-                                        default='http://127.0.0.1:8002/jov/api/')
+                                        default='http://127.0.0.1:8002/jov/api/',\
+                                        editable=False)
     approved = models.BooleanField(default=False)
 
 
@@ -162,7 +164,7 @@ class InvestmentsMade(models.Model):
                       {str(self.date_submitted)[:16]}.")
 
 class Solde(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
     usdt = models.FloatField(help_text="Le solde actuel en usdt",\
                               default=0)
     usd = models.FloatField(help_text="Le solde actuel en US Dollar",\
@@ -191,7 +193,7 @@ class Solde(models.Model):
 
 
 class OperationStore(models.Model):
-    code = models.CharField(max_length=15, unique=True)
+    code = models.CharField(max_length=15, unique=True, editable=False)
     source = models.CharField(max_length=15)
     destination = models.CharField(max_length=15, default="null")
     amount = models.IntegerField(help_text="Le montant de l'operation",\
@@ -200,4 +202,8 @@ class OperationStore(models.Model):
     motif = models.CharField(max_length=25)
     date_approved = models.DateTimeField(default=datetime.now())
     who_approved = models.CharField(max_length=15, default="null")
+
+    def __str__(self) -> str:
+        return f"{self.motif}: {self.amount}({self.currency}); {(str(self.date_approved))[:16]};\
+              #{self.code} ."
 

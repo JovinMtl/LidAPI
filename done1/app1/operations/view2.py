@@ -26,7 +26,7 @@ from ..serializers import RequeSeria, UserSeriazer, PorteSeria
 from ..serializers import InveSeria, DepoSeria, SoldeSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
-                          Solde
+                          Solde, OperationStore
 
 from ..lumi.client_Lumi import LumiRequest 
 from ..lumi.login import UserBrowising
@@ -545,6 +545,46 @@ class UserManViewset(viewsets.ViewSet):
             return JsonResponse({f"{request.user}": 'is not authenticated'})
             return JsonResponse({'message': 'User is not authenticated'},\
                                 status=401)
+## Global Functions
+def writeOperation(code, source, destination, amount, currency,\
+                       motif, who_approved):
+    newOperation = OperationStore.objects.create()
+    newOperation.code = code
+    newOperation.source = source
+    newOperation.destination = destination
+    newOperation.amount = amount
+    newOperation.currency = currency
+    newOperation.motif = motif
+    newOperation.who_approved = who_approved
+    newOperation.save()
+    return 200
+
+def workOnSolde(source, destination, amount, currency, who_approved):
+    lower_currency = currency.lower()  # is sent from Vue3 in uppercase
+    
+    if amount > 0 and (getattr(source, lower_currency) > amount):
+        source_value = (getattr(source, lower_currency)) - amount
+        destination_value = (getattr(destination, lower_currency)) + amount
+
+        setattr(source, lower_currency, source_value)
+        setattr(destination, lower_currency, destination_value)
+
+        print("The source sent is :", source.owner.username)
+
+        responseCode = GenerateCode().giveCode()
+        print("The new Code generated is : ", responseCode)
+        responseOperation = writeOperation(code=responseCode, source=source.owner.username,\
+                        destination=destination.owner.username, amount=amount, \
+                       currency=currency,motif="Dépôt", who_approved=who_approved)
+        # responseOperation = 200
+        if responseOperation == 200:
+            destination.save()
+            return 200
+        else:
+            return 203
+    else :
+        return 204
+ 
 
 class DepotOperations(viewsets.ViewSet):
     # company_solde = Solde.objects.get(pk=1)
@@ -582,8 +622,8 @@ class DepotOperations(viewsets.ViewSet):
         currency = depot.currency
         actualSoldeObject = Solde.objects.get(owner_id=owner_id)
         #function that operates on Solde
-        response = self.workOnSolde(company_solde, actualSoldeObject,\
-                         depot.montant, currency)
+        response = workOnSolde(company_solde, actualSoldeObject,\
+                         depot.montant, currency, str(request.user.username))
         if response == 200:
             depot.approved = True
             depot.save()
@@ -591,23 +631,8 @@ class DepotOperations(viewsets.ViewSet):
         else:
             return JsonResponse({"C'est mal ": "passe"})
     
-    def workOnSolde(self, source, destination, amount, currency):
-        lower_currency = currency.lower()  # is sent from Vue3 in uppercase
-        
-        if amount > 0 and (getattr(source, lower_currency) > amount):
-            source_value = (getattr(source, lower_currency)) - amount
-            destination_value = (getattr(destination, lower_currency)) + amount
-
-            setattr(source, lower_currency, source_value)
-            setattr(destination, lower_currency, destination_value)
-
-            responseCode = GenerateCode().giveCode()
-            print("The new Code generated is : ", responseCode)
-            
-            destination.save()
-            return 200
-        else :
-            return 204
+       
+    
 
     @action(methods=['get'], detail=True)
     def getBordereau(self, request, pk):
