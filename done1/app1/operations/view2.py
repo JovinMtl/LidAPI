@@ -762,3 +762,17 @@ class SoldeOperations(viewsets.ViewSet):
             return Response(solde_serializer.data)
 
         return JsonResponse({"Les choses sont: ": "bien passees"})
+
+
+class Nofications(viewsets.ViewSet):
+
+    @action(methods=['get'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def getAll(self, request):
+        notifDepot = DepotPreuve.objects.filter(owner=str(request.user))
+
+        notifDepot_seria = DepoSeria(notifDepot, many=True)
+        
+        if notifDepot_seria.is_valid:
+            return Response(notifDepot_seria.data)
+        return Response(notifDepot_seria.data)
