@@ -23,7 +23,7 @@ from functools import wraps
 import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
-from ..serializers import InveSeria, DepoSeria, SoldeSeria
+from ..serializers import InveSeria, DepoSeria, SoldeSeria, OperationSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
                           Solde, OperationStore
@@ -794,10 +794,10 @@ class Nofications(viewsets.ViewSet):
     @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
     def getAll(self, request):
-        notifDepot = DepotPreuve.objects.filter(owner=str(request.user)).filter(approved=True).order_by('-date_approved')
-        notifDepot = InvestmentsMade.objects.filter(owner=str(request.user)).filter(approved=True).order_by('-date_approved')
+        notifDepot = OperationStore.objects.filter(destination=str(request.user)).order_by('-date_approved')
+        # notifDepot = InvestmentsMade.objects.filter(owner=str(request.user)).filter(approved=True).order_by('-date_approved')
 
-        notifDepot_seria = DepoSeria(notifDepot, many=True)
+        notifDepot_seria = OperationSeria(notifDepot, many=True)
         
         if notifDepot_seria.is_valid:
             return Response(notifDepot_seria.data)
