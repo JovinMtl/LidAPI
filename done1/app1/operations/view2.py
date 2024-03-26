@@ -601,9 +601,8 @@ class DepotOperations(viewsets.ViewSet):
             setattr(source, lower_currency, source_value)
             setattr(destination, lower_currency, destination_value)
 
-            print(f"Attribute of {lower_currency} is set correctly at\
-                   {getattr(destination, lower_currency)} \
-                    which is {destination}")
+            responseCode = GenerateCode().giveCode()
+            print("The new Code generated is : ", responseCode)
             
             destination.save()
             return 200
