@@ -3,6 +3,7 @@
 from random import choice
 
 # from ..models import Recharge
+from ..models import OperationStore
 
 
 class GenerateCode:
@@ -23,33 +24,6 @@ class GenerateCode:
         self.choices = []
         self.code = ""
         self.max = high
-        # self.last_uid = Recharge.objects.last()
-    
-    
-
-    # def generate(self, table):
-    #     worth = True
-    #     while worth:
-    #         for _ in range(2):
-    #             for _ in range(2):
-    #                 choice1 = choice(self.input1)
-    #                 self.choices.append(choice1)
-    #             for _ in range(3):
-    #                 choice2 = choice(self.input2)
-    #                 self.choices.append(choice2)
-    #             choice1 = choice(self.input1)
-    #             self.choices.append(choice1)
-    #         for element in self.choices:
-    #             self.code += str(element)
-            
-    #         if table == 'recharge':
-    #             try:
-    #                 obj = Recharge.objects.get(code_transaction=self.code)
-    #             except Recharge.DoesNotExist:
-    #                 worth = False
-    #                 return self.code
-    #             else:
-    #                 worth = True
     
     def gene(self):
         """This one is super dynamic"""
@@ -73,14 +47,15 @@ class GenerateCode:
         print(f"The length is {len(self.code)} / {self.max}")
         return self.code
     
-    # def genUid(self):
-    #     last_uid = self.last_uid.id
-    #     current_uid = last_uid + 1
-    #     self.last_uid -= 1
-    #     return current_uid
-    
 
-
-# jov = GenerateCode()
-# code = jov.genUid()
-# print(f"THe code generated is:\n{code}")
+    def giveCode(self):
+        worth = True
+        while worth:
+            current_code = self.gene()
+            try:
+                verify = OperationStore.objects.get(code=current_code)
+            except OperationStore.DoesNotExist:
+                worth = False
+            else:
+                worth = True
+        return current_code
