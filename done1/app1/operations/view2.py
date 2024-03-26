@@ -771,6 +771,7 @@ class Nofications(viewsets.ViewSet):
              permission_classes= [IsAuthenticated])
     def getAll(self, request):
         notifDepot = DepotPreuve.objects.filter(owner=str(request.user)).filter(approved=True).order_by('-date_approved')
+        notifDepot = InvestmentsMade.objects.filter(owner=str(request.user)).filter(approved=True).order_by('-date_approved')
 
         notifDepot_seria = DepoSeria(notifDepot, many=True)
         

@@ -188,3 +188,15 @@ class Solde(models.Model):
     
     def __str__(self) -> str:
         return f"Solde de {self.owner.username} en USDT: {self.usdt}."
+
+
+class OperationStore(models.Model):
+    code = models.CharField(max_length=15, unique=True)
+    source = models.CharField(max_length=15)
+    destination = models.CharField(max_length=15, default="null")
+    amount = models.IntegerField(help_text="Le montant de l'operation",\
+                                  default=0)
+    motif = models.CharField(max_length=25)
+    date_approved = models.DateTimeField(default=datetime.now())
+    who_approved = models.CharField(max_length=15, default="null")
+
