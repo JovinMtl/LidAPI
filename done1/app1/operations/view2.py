@@ -575,7 +575,7 @@ def workOnSolde(source, destination, amount, currency, who_approved):
         print("The new Code generated is : ", responseCode)
         responseOperation = writeOperation(code=responseCode, source=source.owner.username,\
                         destination=destination.owner.username, amount=amount, \
-                       currency=currency,motif="Dépôt", who_approved=who_approved)
+                       currency=currency,motif="Depot", who_approved=who_approved)
         # responseOperation = 200
         if responseOperation == 200:
             destination.save()
