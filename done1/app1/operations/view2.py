@@ -823,8 +823,25 @@ class SearchUser(viewsets.ViewSet):
         dataReceived = request.data
         username = dataReceived.get('username')
         try:
-            user = User.objects.get(username=username)
+            user_requested = User.objects.get(username=username)
         except User.DoesNotExist:
-            return JsonResponse({"The username is":"new"}, status=200)
+            return JsonResponse({"response":"new"}, status=200)
         else:
-            return JsonResponse({"The User":"exist"}, status=204)
+            soldeUser = Solde.objects.get(owner=user_requested)
+            histoUser = OperationStore.objects.filter(source=user_requested.username)[::-1]
+            notifs = OperationStore.objects.filter(destination=user_requested.username)[::-1]
+            soldeUser_serializer = SoldeSeria(soldeUser)
+            histoUser_serializer = OperationSeria(histoUser, many=True)
+            notifs_serializer = OperationSeria(notifs, many=True)
+
+            combined = []
+
+            if ((soldeUser_serializer.is_valid and \
+                histoUser_serializer.is_valid) and (notifs_serializer.is_valid)):
+                combined = {
+                    'solde' : soldeUser_serializer.data,
+                    'historique' : histoUser_serializer.data,
+                    'notifications' : notifs_serializer.data,
+                }
+                return Response(combined)
+            return JsonResponse({"response":"exist"}, status=200)

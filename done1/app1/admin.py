@@ -18,6 +18,9 @@ class OperationStoreAdmin(admin.ModelAdmin):
 class DepotPreuveAdmin(admin.ModelAdmin):
     readonly_fields = ('link_to_approve',)
 
+class SoldeAdmin(admin.ModelAdmin):
+    readonly_fields = ('owner',)
+
 
 # Register your models here.
 
@@ -30,5 +33,5 @@ class DepotPreuveAdmin(admin.ModelAdmin):
 admin.site.register(DepotPreuve, DepotPreuveAdmin)
 admin.site.register(RetraitLives)
 admin.site.register(InvestmentsMade)
-admin.site.register(Solde)
+admin.site.register(Solde, SoldeAdmin)
 admin.site.register(OperationStore, OperationStoreAdmin)
