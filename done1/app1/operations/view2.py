@@ -820,7 +820,9 @@ class SearchUser(viewsets.ViewSet):
     @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
     def userAvailable(self, request):
-        dataReceived = request.data
-        print("The data Received is : ", dataReceived)
-
-        return JsonResponse({"Ended ":"well"})
+        try:
+            user = User.objects.get(username=request.user.username)
+        except User.DoesNotExist:
+            return JsonResponse({"The username is":"new"}, status=200)
+        else:
+            return JsonResponse({"The User":"exist"}, status=201)
