@@ -794,13 +794,21 @@ class Nofications(viewsets.ViewSet):
 
     @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
-    def getAll(self, request, pk=1):
-        """If pk=1 it means Notifications which works on destination
-        and if pk=2(or else) it means Actions made which works on source"""
-        if pk == 1:
-            notifDepot = OperationStore.objects.filter(destination=str(request.user)).order_by('-date_approved')
-        else:
-            notifDepot = OperationStore.objects.filter(source=str(request.user)).order_by('-date_approved')
+    def getAll(self, request):
+        notifDepot = OperationStore.objects.filter(destination=str(request.user)).order_by('-date_approved')
+        # notifDepot = InvestmentsMade.objects.filter(owner=str(request.user)).filter(approved=True).order_by('-date_approved')
+
+        notifDepot_seria = OperationSeria(notifDepot, many=True)
+        
+        if notifDepot_seria.is_valid:
+            return Response(notifDepot_seria.data)
+        return Response(notifDepot_seria.data)
+    
+    @action(methods=['get'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def getHisto(self, request):
+        notifDepot = OperationStore.objects.filter(source=str(request.user)).order_by('-date_approved')
+        # notifDepot = InvestmentsMade.objects.filter(owner=str(request.user)).filter(approved=True).order_by('-date_approved')
 
         notifDepot_seria = OperationSeria(notifDepot, many=True)
         
