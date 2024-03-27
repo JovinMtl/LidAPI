@@ -817,11 +817,13 @@ class Nofications(viewsets.ViewSet):
         return Response(notifDepot_seria.data)
     
 class SearchUser(viewsets.ViewSet):
-    @action(methods=['get'], detail=False,\
+    @action(methods=['post'], detail=False,\
              permission_classes= [IsAuthenticated])
     def userAvailable(self, request):
+        dataReceived = request.data
+        username = dataReceived.get('username')
         try:
-            user = User.objects.get(username=request.user.username)
+            user = User.objects.get(username=username)
         except User.DoesNotExist:
             return JsonResponse({"The username is":"new"}, status=200)
         else:
