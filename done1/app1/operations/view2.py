@@ -827,4 +827,4 @@ class SearchUser(viewsets.ViewSet):
         except User.DoesNotExist:
             return JsonResponse({"The username is":"new"}, status=200)
         else:
-            return JsonResponse({"The User":"exist"}, status=201)
+            return JsonResponse({"The User":"exist"}, status=204)
