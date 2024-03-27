@@ -815,3 +815,12 @@ class Nofications(viewsets.ViewSet):
         if notifDepot_seria.is_valid:
             return Response(notifDepot_seria.data)
         return Response(notifDepot_seria.data)
+    
+class SearchUser(viewsets.ViewSet):
+    @action(methods=['get'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def userAvailable(self, request):
+        dataReceived = request.data
+        print("The data Received is : ", dataReceived)
+
+        return JsonResponse({"Ended ":"well"})
