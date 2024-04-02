@@ -843,5 +843,6 @@ class SearchUser(viewsets.ViewSet):
                     'historique' : histoUser_serializer.data,
                     'notifications' : notifs_serializer.data,
                 }
+                # return JsonResponse({"response":"exist"}, status=200)
                 return Response(combined)
             return JsonResponse({"response":"exist"}, status=200)
