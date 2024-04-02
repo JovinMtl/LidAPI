@@ -23,7 +23,8 @@ from functools import wraps
 import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
-from ..serializers import InveSeria, DepoSeria, SoldeSeria, OperationSeria
+from ..serializers import InveSeria, DepoSeria, SoldeSeria, OperationSeria,\
+                            BasicInfoSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
                           Solde, OperationStore
@@ -584,6 +585,21 @@ def workOnSolde(source, destination, amount, currency, who_approved):
             return 203
     else :
         return 204
+    
+def infoUser(user):
+    """This is to return the gathered basic infos related to the user"""
+    basic_info = {
+        'firstname'
+    }
+    basic_info['firstname'] = user.firstname
+    basic_info['lastname'] = user.lastname
+    basic_info['username'] = user.username
+    basic_info['phonenumber'] = user.phonenumber
+    basic_info['email'] = user.email
+
+    basic_info_serialized = BasicInfoSeria(basic_info, many=True)
+
+    return infoUser
  
 
 class DepotOperations(viewsets.ViewSet):

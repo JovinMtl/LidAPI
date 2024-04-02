@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.db import models
 
 from .models import Person, Requeste, PorteFeuille
 
@@ -46,3 +47,12 @@ class OperationSeria(serializers.ModelSerializer):
     class Meta:
         model = OperationStore
         fields = '__all__'
+
+class BasicInfoSeria(serializers.ModelSerializer):
+    """THis is a personalized serializer for a gathered informations
+    related to the user"""
+    firstname = models.CharField(max_length=15, default=None)
+    lastname = models.CharField(max_length=15, default=None)
+    username = models.CharField(max_length=10, default=None)
+    phonenumber = models.CharField(max_length=15, default=None)
+    email = models.EmailField(max_length=20, default=None)
