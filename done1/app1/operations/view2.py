@@ -588,18 +588,27 @@ def workOnSolde(source, destination, amount, currency, who_approved):
     
 def infoUser(user):
     """This is to return the gathered basic infos related to the user"""
-    basic_info = {
-        'firstname'
-    }
-    basic_info['firstname'] = user.firstname
-    basic_info['lastname'] = user.lastname
-    basic_info['username'] = user.username
-    basic_info['phonenumber'] = user.phonenumber
-    basic_info['email'] = user.email
+    basic_info = {}
+    try:
+        basic_info['username'] = user.username
+        basic_info['level'] = 1
+    except AttributeError:
+        pass
+    try:
+        basic_info['firstname'] = user.firstname
+        basic_info['lastname'] = user.lastname
+        basic_info['phonenumber'] = user.phonenumber
+        basic_info['email'] = user.email
+        basic_info['level'] = 2
+    except AttributeError:
+        pass 
 
-    basic_info_serialized = BasicInfoSeria(basic_info, many=True)
+    basic_info_serialized = BasicInfoSeria(basic_info)
+    if basic_info_serialized.is_valid:
+        print("Your Basic_info Serializer WORKED well")
+        return basic_info_serialized.data #when things went well
 
-    return infoUser
+    return 'infoUser' #when things didn't go well
  
 
 class DepotOperations(viewsets.ViewSet):
@@ -850,11 +859,18 @@ class SearchUser(viewsets.ViewSet):
             histoUser_serializer = OperationSeria(histoUser, many=True)
             notifs_serializer = OperationSeria(notifs, many=True)
 
+            user_info = infoUser(user_requested)
+            #printing something
+            if (user_info is not str):
+                print("THe things went really well")
+
             combined = []
 
             if ((soldeUser_serializer.is_valid and \
-                histoUser_serializer.is_valid) and (notifs_serializer.is_valid)):
+                histoUser_serializer.is_valid) and \
+                (notifs_serializer.is_valid) and (user_info is not str)):
                 combined = {
+                    'info' : user_info,
                     'solde' : soldeUser_serializer.data,
                     'historique' : histoUser_serializer.data,
                     'notifications' : notifs_serializer.data,
