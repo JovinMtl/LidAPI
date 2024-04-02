@@ -561,7 +561,8 @@ def writeOperation(code, source, destination, amount, currency,\
     newOperation.save()
     return 200
 
-def workOnSolde(source, destination, amount, currency, who_approved):
+def workOnSolde(source, destination, amount, currency, who_approved,\
+                 charge=0):
     lower_currency = currency.lower()  # is sent from Vue3 in uppercase
     
     if amount > 0 and (getattr(source, lower_currency) > amount):
@@ -577,7 +578,8 @@ def workOnSolde(source, destination, amount, currency, who_approved):
         print("The new Code generated is : ", responseCode)
         responseOperation = writeOperation(code=responseCode, source=source.owner.username,\
                         destination=destination.owner.username, amount=amount, \
-                       currency=currency,motif="Depot", who_approved=who_approved)
+                       currency=currency,motif="Depot", who_approved=who_approved, \
+                        charge=charge)
         # responseOperation = 200
         if responseOperation == 200:
             destination.save()
