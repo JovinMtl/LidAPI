@@ -200,6 +200,8 @@ class OperationStore(models.Model):
                                   default=0)
     currency = models.CharField(max_length=10, default="null")
     motif = models.CharField(max_length=25)
+    charge = models.IntegerField(help_text="La charge de l'operation",\
+                                  default=0)
     date_approved = models.DateTimeField(default=datetime.now())
     who_approved = models.CharField(max_length=15, default="null")
 

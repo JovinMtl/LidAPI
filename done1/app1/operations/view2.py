@@ -548,13 +548,14 @@ class UserManViewset(viewsets.ViewSet):
                                 status=401)
 ## Global Functions
 def writeOperation(code, source, destination, amount, currency,\
-                       motif, who_approved):
+                       motif, who_approved, charge=0):
     newOperation = OperationStore.objects.create()
     newOperation.code = code
     newOperation.source = source
     newOperation.destination = destination
     newOperation.amount = amount
     newOperation.currency = currency
+    newOperation.charge = charge
     newOperation.motif = motif
     newOperation.who_approved = who_approved
     newOperation.save()
