@@ -219,16 +219,16 @@ class OperationStore(models.Model):
 class CommissionForWithdrawal(models.Model):
     """THis one will store the fees we charge for withdrawal 
     on each currency. for example: 1/1000(1$ on up to 1000$)"""
-    bif = models.CharField(max_length=30, default="null")
-    eur = models.CharField(max_length=15, default="null")
-    kes = models.CharField(max_length=20, default="null")
-    rwf = models.CharField(max_length=25, default="null")
-    trx = models.CharField(max_length=15, default="null")
-    tsh = models.CharField(max_length=30, default="null")
-    ugx = models.CharField(max_length=30, default="null")
-    usd = models.CharField(max_length=15, default="null")
-    usdt = models.CharField(max_length=15, default="null")
-    zmw = models.CharField(max_length=30, default="null")
+    bif = models.CharField(max_length=30, default="5_000/1_000_000")
+    eur = models.CharField(max_length=15, default="1/1_000")
+    kes = models.CharField(max_length=20, default="50/1_000")
+    rwf = models.CharField(max_length=25, default="3_000/1_000_000")
+    trx = models.CharField(max_length=15, default="1/1_000")
+    tsh = models.CharField(max_length=30, default="5_000/1_000_000")
+    ugx = models.CharField(max_length=30, default="8_000/1_000_000")
+    usd = models.CharField(max_length=15, default="1/1_000")
+    usdt = models.CharField(max_length=15, default="1/1_000")
+    zmw = models.CharField(max_length=30, default="5_000/1_000_000")
     date_approved = models.DateTimeField(default=datetime.now())
     who_approved = models.CharField(max_length=15, default="null")
 
