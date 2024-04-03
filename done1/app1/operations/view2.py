@@ -27,7 +27,7 @@ from ..serializers import InveSeria, DepoSeria, SoldeSeria, OperationSeria,\
                             BasicInfoSeria, RetraiSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
-                          Solde, OperationStore
+                          Solde, OperationStore, CommissionForWithdrawal
 
 from ..lumi.client_Lumi import LumiRequest 
 from ..lumi.login import UserBrowising
@@ -563,11 +563,21 @@ def writeOperation(code, source, destination, amount, currency,\
 
 def workOnSolde(source, destination, amount, currency, who_approved,\
                  charge=0):
+    """THis is for DEPOSIT"""
     lower_currency = currency.lower()  # is sent from Vue3 in uppercase
     
     if amount > 0 and (getattr(source, lower_currency) > amount):
-        source_value = (getattr(source, lower_currency)) - amount
-        destination_value = (getattr(destination, lower_currency)) + amount
+        if not charge:
+            source_value = (getattr(source, lower_currency)) - amount
+            destination_value = (getattr(destination, lower_currency)) + amount
+        else:
+            #source ndayikurako yose, destination ikaronka, hamwe na charge
+            commission_actual = CommissionForWithdrawal.objects.last()
+            commission = int(getattr(commission_actual, lower_currency))
+            source_value = (getattr(source, lower_currency)) - (amount + commission)
+            produit_account = User.objects.get(username='PRODUIT')
+            lid_produit = (getattr(produit_account, lower_currency)) + commission
+            setattr(produit_account, lower_currency, lid_produit)
 
         setattr(source, lower_currency, source_value)
         setattr(destination, lower_currency, destination_value)
