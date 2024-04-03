@@ -548,7 +548,7 @@ class UserManViewset(viewsets.ViewSet):
                                 status=401)
 ## Global Functions
 def writeOperation(code, source, destination, amount, currency,\
-                       motif, who_approved, charge=0):
+                      who_approved, motif='Depot', charge=0):
     newOperation = OperationStore.objects.create()
     newOperation.code = code
     newOperation.source = source
@@ -563,7 +563,7 @@ def writeOperation(code, source, destination, amount, currency,\
 
 
 def workOnSolde(source, destination, amount, currency, who_approved,\
-                 charge=0):
+                motif='Depot' ,charge=0):
     """THis is for DEPOSIT"""
     lower_currency = currency.lower()  # is sent from Vue3 in uppercase
     
@@ -591,7 +591,7 @@ def workOnSolde(source, destination, amount, currency, who_approved,\
         print("The new Code generated is : ", responseCode)
         responseOperation = writeOperation(code=responseCode, source=source.owner.username,\
                         destination=destination.owner.username, amount=amount, \
-                       currency=currency,motif="Depot", who_approved=who_approved, \
+                       currency=currency,motif=motif, who_approved=who_approved, \
                         charge=charge)
         # responseOperation = 200
         if responseOperation == 200:
@@ -746,14 +746,15 @@ class RetraitOperations(viewsets.ViewSet):
         # calling te function to handle the withdrawal
         reponse = workOnSolde(source=user_solde, destination=company_solde, \
                     amount=retrait.montant, currency=retrait.currency, \
-                        who_approved=str(request.user), charge=1)
+                        who_approved=str(request.user), charge=1, \
+                            motif='Retrait')
         
         if reponse == 200:
             retrait.approved = True
             retrait.save()
 
             # return Response
-            return JsonResponse({"rapport": "ok"}, status=200)
+            return JsonResponse({"rapport": "ok"}, status=202)
         else:
             return JsonResponse({'rapport ': reponse}, status=201)
         return JsonResponse({"C'est ": "Bon"})
