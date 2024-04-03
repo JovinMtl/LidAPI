@@ -937,7 +937,7 @@ class SearchInfo(viewsets.ViewSet):
     
     @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
-    def askCommissions(self):
+    def askCommissions(self, request):
         """Gives the actual commissions fees tables to be applied"""
         commission_actual = CommissionForWithdrawal.objects.last()
         commission_actual_serializer = CommissionSeria(commission_actual)
