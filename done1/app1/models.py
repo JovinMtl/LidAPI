@@ -169,8 +169,8 @@ class InvestmentsMade(models.Model):
                       {str(self.date_submitted)[:16]}.")
 
 class Solde(models.Model):
-    # owner = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
+    # owner = models.ForeignKey(User, on_delete=models.CASCADE)
     usdt = models.FloatField(help_text="Le solde actuel en usdt",\
                               default=0)
     usd = models.FloatField(help_text="Le solde actuel en US Dollar",\
@@ -215,3 +215,22 @@ class OperationStore(models.Model):
         return f"{self.motif}: {self.amount}({self.currency}); {(str(self.date_approved))[:16]};\
               #{self.code} ."
 
+
+class CommissionForWithdrawal(models.Model):
+    """THis one will store the fees we charge for withdrawal 
+    on each currency. for example: 1/1000(1$ on up to 1000$)"""
+    bif = models.CharField(max_length=30, default="null")
+    eur = models.CharField(max_length=15, default="null")
+    kes = models.CharField(max_length=20, default="null")
+    rwf = models.CharField(max_length=25, default="null")
+    trx = models.CharField(max_length=15, default="null")
+    tsh = models.CharField(max_length=30, default="null")
+    ugx = models.CharField(max_length=30, default="null")
+    usd = models.CharField(max_length=15, default="null")
+    usdt = models.CharField(max_length=15, default="null")
+    zmw = models.CharField(max_length=30, default="null")
+    date_approved = models.DateTimeField(default=datetime.now())
+    who_approved = models.CharField(max_length=15, default="null")
+
+    def __str__(self) -> str:
+        return f"Commission on {(str(self.date_approved))[:11]}"
