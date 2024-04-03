@@ -567,17 +567,21 @@ def workOnSolde(source, destination, amount, currency, who_approved,\
     lower_currency = currency.lower()  # is sent from Vue3 in uppercase
     
     if amount > 0 and (getattr(source, lower_currency) > amount):
+        destination_value = (getattr(destination, lower_currency)) + amount
         if not charge:
             source_value = (getattr(source, lower_currency)) - amount
-            destination_value = (getattr(destination, lower_currency)) + amount
         else:
             #source ndayikurako yose, destination ikaronka, hamwe na charge
             commission_actual = CommissionForWithdrawal.objects.last()
-            commission = int(getattr(commission_actual, lower_currency))
+            print(f"The commission : {str(getattr(commission_actual, lower_currency))}")
+            commission = int(((str(getattr(commission_actual, lower_currency))).split('/'))[0])
             source_value = (getattr(source, lower_currency)) - (amount + commission)
-            produit_account = User.objects.get(username='PRODUIT')
-            lid_produit = (getattr(produit_account, lower_currency)) + commission
-            setattr(produit_account, lower_currency, lid_produit)
+            produit_user_account = User.objects.get(username='PRODUIT')
+            produit_solde_account = Solde.objects.get(owner=produit_user_account)
+            lid_produit = int((getattr(produit_solde_account, lower_currency)) + commission)
+            setattr(produit_solde_account, lower_currency, lid_produit)
+            produit_solde_account.save()
+            print(f"The commission applied: {commission}")
 
         setattr(source, lower_currency, source_value)
         setattr(destination, lower_currency, destination_value)
@@ -593,6 +597,7 @@ def workOnSolde(source, destination, amount, currency, who_approved,\
         # responseOperation = 200
         if responseOperation == 200:
             destination.save()
+            source.save()
             return 200
         else:
             return 203
@@ -733,8 +738,23 @@ class RetraitOperations(viewsets.ViewSet):
     @action(methods=['get'], detail=True,\
              permission_classes= [IsAuthenticated])
     def approve(self, request, pk):
+        """We want to approve the WithDrawal"""
         retrait = RetraitLives.objects.get(pk=pk)
         company_solde = Solde.objects.get(pk=2)
+        user = User.objects.get(username=str(retrait.owner))
+        user_solde = Solde.objects.get(owner=user)
+        charges = CommissionForWithdrawal.objects.last()
+
+        # calling te function to handle the withdrawal
+        reponse = workOnSolde(source=user_solde, destination=company_solde, \
+                    amount=retrait.montant, currency=retrait.currency, \
+                        who_approved=str(request.user), charge=1)
+        
+        if reponse == 200:
+            return JsonResponse({"C'est ": "BIen"})
+        else:
+            return JsonResponse({'rapport ': reponse})
+        return JsonResponse({"C'est ": "Bon"})
 
     
     @action(methods=['get'], detail=False,\
