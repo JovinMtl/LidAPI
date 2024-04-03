@@ -894,7 +894,7 @@ class Nofications(viewsets.ViewSet):
             return Response(notifDepot_seria.data)
         return Response(notifDepot_seria.data)
     
-class SearchUser(viewsets.ViewSet):
+class SearchInfo(viewsets.ViewSet):
     @action(methods=['post'], detail=False,\
              permission_classes= [IsAuthenticated])
     def userAvailable(self, request):
