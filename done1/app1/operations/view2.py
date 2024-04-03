@@ -24,7 +24,7 @@ import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
 from ..serializers import InveSeria, DepoSeria, SoldeSeria, OperationSeria,\
-                            BasicInfoSeria
+                            BasicInfoSeria, RetraiSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
                           Solde, OperationStore
@@ -707,15 +707,37 @@ class RetraitOperations(viewsets.ViewSet):
              permission_classes= [IsAuthenticated])
     def receiveRetrait(self, request):
         # parser_classes = [MultiPartParser]
+        newRetrait = RetraitLives.objects.create(owner=request.user)
         dataSent = request.data
-        newRetrait = RetraitLives.objects.create()
+        newRetrait.owner = request.user
         newRetrait.currency = dataSent.get('currency')
         newRetrait.numero = dataSent.get('numero')
         newRetrait.benefitor = dataSent.get('benefitor')
         newRetrait.montant = int(dataSent.get('montant'))
         newRetrait.date_submitted = timezone.now()
+        url = 'http://localhost:8002/jov/api/retrait/{newRetrait.id}/approve'
+        newRetrait.link_to_approve = url
         newRetrait.save()
         return JsonResponse({"Things are ": "well"})
+    
+    @action(methods=['get'], detail=True,\
+             permission_classes= [IsAuthenticated])
+    def approve(self, request, pk):
+        retrait = RetraitLives.objects.get(pk=pk)
+        company_solde = Solde.objects.get(pk=2)
+
+    
+    @action(methods=['get'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def allRetraits(self, request):
+        retraits = RetraitLives.objects.all()
+        retraits_serializer = RetraiSeria(retraits, many=True)
+
+        if retraits_serializer.is_valid:
+            # pass
+            return Response(retraits_serializer.data)
+        
+        return JsonResponse({"The things are ": retraits_serializer.data})
     
 
 

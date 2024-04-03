@@ -18,6 +18,9 @@ class OperationStoreAdmin(admin.ModelAdmin):
 class DepotPreuveAdmin(admin.ModelAdmin):
     readonly_fields = ('link_to_approve',)
 
+class Retraits(admin.ModelAdmin):
+    readonly_fields = ('owner',)
+
 class SoldeAdmin(admin.ModelAdmin):
     readonly_fields = ('owner',)
 
@@ -31,7 +34,7 @@ class SoldeAdmin(admin.ModelAdmin):
 # admin.site.register(Differente)
 # admin.site.register(Trade)
 admin.site.register(DepotPreuve, DepotPreuveAdmin)
-admin.site.register(RetraitLives)
+admin.site.register(RetraitLives, Retraits)
 admin.site.register(InvestmentsMade)
 admin.site.register(Solde, SoldeAdmin)
 admin.site.register(OperationStore, OperationStoreAdmin)

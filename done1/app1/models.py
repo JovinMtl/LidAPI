@@ -122,9 +122,13 @@ class RetraitLives(models.Model):
                                   default=0)
     date_submitted = models.DateTimeField(default=timezone.now())
     date_approved = models.DateTimeField(default=timezone.now())
-    # link_to_approve = models.linkfield
-    # who_approved = models.ForeignKeymodels.ForeignKey(User, on_delete=models.CASCADE)
-    # owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, \
+                              related_name="The_one_who_initiated")
+    who_approved = models.CharField(max_length=10, default="null")
+    link_to_approve = models.URLField(max_length=50, \
+                default="http://localhost:8002/jov/api/depot/4/approveDepot/",\
+                editable=False)
+    approved = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return str(f"Retrait  {self.montant}({self.currency}), \
