@@ -750,6 +750,7 @@ class RetraitOperations(viewsets.ViewSet):
         
         if reponse == 200:
             retrait.approved = True
+            retrait.save()
             return JsonResponse({"rapport": "ok"})
         else:
             return JsonResponse({'rapport ': reponse})
