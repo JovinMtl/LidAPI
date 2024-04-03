@@ -573,7 +573,6 @@ def workOnSolde(source, destination, amount, currency, who_approved,\
         else:
             #source ndayikurako yose, destination ikaronka, hamwe na charge
             commission_actual = CommissionForWithdrawal.objects.last()
-            print(f"The commission : {str(getattr(commission_actual, lower_currency))}")
             commission = int(((str(getattr(commission_actual, lower_currency))).split('/'))[0])
             source_value = (getattr(source, lower_currency)) - (amount + commission)
             produit_user_account = User.objects.get(username='PRODUIT')
@@ -581,7 +580,6 @@ def workOnSolde(source, destination, amount, currency, who_approved,\
             lid_produit = int((getattr(produit_solde_account, lower_currency)) + commission)
             setattr(produit_solde_account, lower_currency, lid_produit)
             produit_solde_account.save()
-            print(f"The commission applied: {commission}")
 
         setattr(source, lower_currency, source_value)
         setattr(destination, lower_currency, destination_value)
@@ -743,7 +741,6 @@ class RetraitOperations(viewsets.ViewSet):
         company_solde = Solde.objects.get(pk=2)
         user = User.objects.get(username=str(retrait.owner))
         user_solde = Solde.objects.get(owner=user)
-        charges = CommissionForWithdrawal.objects.last()
 
         # calling te function to handle the withdrawal
         reponse = workOnSolde(source=user_solde, destination=company_solde, \
@@ -751,7 +748,8 @@ class RetraitOperations(viewsets.ViewSet):
                         who_approved=str(request.user), charge=1)
         
         if reponse == 200:
-            return JsonResponse({"C'est ": "BIen"})
+            retrait.approved = True
+            return JsonResponse({"rapport": "ok"})
         else:
             return JsonResponse({'rapport ': reponse})
         return JsonResponse({"C'est ": "Bon"})
