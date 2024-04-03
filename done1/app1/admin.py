@@ -19,7 +19,7 @@ class DepotPreuveAdmin(admin.ModelAdmin):
     readonly_fields = ('link_to_approve',)
 
 class Retraits(admin.ModelAdmin):
-    readonly_fields = ('owner',)
+    readonly_fields = ('link_to_approve','owner',)
 
 class SoldeAdmin(admin.ModelAdmin):
     readonly_fields = ('owner',)
