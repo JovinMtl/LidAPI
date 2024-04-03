@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from .models import Person, Requeste, PorteFeuille
 
 from .models import InvestmentsMade, DepotPreuve, Solde, OperationStore,\
-                    RetraitLives
+                    RetraitLives, CommissionForWithdrawal
 
 
 
@@ -51,6 +51,11 @@ class SoldeSeria(serializers.ModelSerializer):
 class OperationSeria(serializers.ModelSerializer):
     class Meta:
         model = OperationStore
+        fields = '__all__'
+
+class CommissionSeria(serializers.ModelSerializer):
+    class Meta:
+        model = CommissionForWithdrawal
         fields = '__all__'
 
 class BasicInfoSeria(serializers.Serializer):
