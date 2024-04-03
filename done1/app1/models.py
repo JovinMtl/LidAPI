@@ -132,8 +132,9 @@ class RetraitLives(models.Model):
     approved = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return str(f"Retrait  {self.montant}({self.currency}), \
-                   {self.benefitor}, {str(self.date_submitted)[:16]}.")
+        return str(f"Retrait  {self.montant}({self.currency}) \
+                   {self.approved}, {self.benefitor},\
+                      {str(self.date_submitted)[:16]}.")
 
 
 class InvestmentsMade(models.Model):
