@@ -122,8 +122,9 @@ class RetraitLives(models.Model):
                                   default=0)
     date_submitted = models.DateTimeField(default=timezone.now())
     date_approved = models.DateTimeField(default=timezone.now())
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, \
-                              related_name="The_one_who_initiated")
+    # owner = models.ForeignKey(User, on_delete=models.CASCADE, \
+    #                           related_name="The_one_who_initiated")
+    owner = models.CharField(max_length=10, default="null")
     who_approved = models.CharField(max_length=10, default="null")
     link_to_approve = models.URLField(max_length=50, \
                 default="http://localhost:8002/jov/api/depot/4/approveDepot/",\
