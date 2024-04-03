@@ -729,7 +729,7 @@ class RetraitOperations(viewsets.ViewSet):
         newRetrait.benefitor = dataSent.get('benefitor')
         newRetrait.montant = int(dataSent.get('montant'))
         newRetrait.date_submitted = timezone.now()
-        url = f"http://localhost:8002/jov/api/retrait/{newRetrait.id}/approve"
+        url = f"http://localhost:8002/jov/api/retrait/{newRetrait.id}/approve/"
         newRetrait.link_to_approve = url
         newRetrait.save()
         return JsonResponse({"Things are ": "well"})
@@ -760,6 +760,30 @@ class RetraitOperations(viewsets.ViewSet):
              permission_classes= [IsAuthenticated])
     def allRetraits(self, request):
         retraits = RetraitLives.objects.all()[::-1]
+        retraits_serializer = RetraiSeria(retraits, many=True)
+
+        if retraits_serializer.is_valid:
+            # pass
+            return Response(retraits_serializer.data)
+        
+        return JsonResponse({"The things are ": retraits_serializer.data})
+    
+    @action(methods=['get'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def needRetraits(self, request):
+        retraits = RetraitLives.objects.filter(approved=False)[::-1]
+        retraits_serializer = RetraiSeria(retraits, many=True)
+
+        if retraits_serializer.is_valid:
+            # pass
+            return Response(retraits_serializer.data)
+        
+        return JsonResponse({"The things are ": retraits_serializer.data})
+    
+    @action(methods=['get'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def doneRetraits(self, request):
+        retraits = RetraitLives.objects.filter(approved=True)[::-1]
         retraits_serializer = RetraiSeria(retraits, many=True)
 
         if retraits_serializer.is_valid:
