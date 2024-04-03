@@ -169,7 +169,8 @@ class InvestmentsMade(models.Model):
                       {str(self.date_submitted)[:16]}.")
 
 class Solde(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
+    # owner = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     usdt = models.FloatField(help_text="Le solde actuel en usdt",\
                               default=0)
     usd = models.FloatField(help_text="Le solde actuel en US Dollar",\
