@@ -715,7 +715,7 @@ class RetraitOperations(viewsets.ViewSet):
         newRetrait.benefitor = dataSent.get('benefitor')
         newRetrait.montant = int(dataSent.get('montant'))
         newRetrait.date_submitted = timezone.now()
-        url = 'http://localhost:8002/jov/api/retrait/{newRetrait.id}/approve'
+        url = f"http://localhost:8002/jov/api/retrait/{newRetrait.id}/approve"
         newRetrait.link_to_approve = url
         newRetrait.save()
         return JsonResponse({"Things are ": "well"})
