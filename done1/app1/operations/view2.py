@@ -709,7 +709,7 @@ class RetraitOperations(viewsets.ViewSet):
         # parser_classes = [MultiPartParser]
         newRetrait = RetraitLives.objects.create(owner=request.user)
         dataSent = request.data
-        newRetrait.owner = request.user
+        newRetrait.owner = str(request.user.username)
         newRetrait.currency = dataSent.get('currency')
         newRetrait.numero = dataSent.get('numero')
         newRetrait.benefitor = dataSent.get('benefitor')
@@ -730,7 +730,7 @@ class RetraitOperations(viewsets.ViewSet):
     @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
     def allRetraits(self, request):
-        retraits = RetraitLives.objects.all()
+        retraits = RetraitLives.objects.all()[::-1]
         retraits_serializer = RetraiSeria(retraits, many=True)
 
         if retraits_serializer.is_valid:
