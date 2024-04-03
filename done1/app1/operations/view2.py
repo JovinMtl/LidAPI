@@ -24,7 +24,7 @@ import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
 from ..serializers import InveSeria, DepoSeria, SoldeSeria, OperationSeria,\
-                            BasicInfoSeria, RetraiSeria
+                            BasicInfoSeria, RetraiSeria, CommissionSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
                           Solde, OperationStore, CommissionForWithdrawal
@@ -561,6 +561,7 @@ def writeOperation(code, source, destination, amount, currency,\
     newOperation.save()
     return 200
 
+
 def workOnSolde(source, destination, amount, currency, who_approved,\
                  charge=0):
     """THis is for DEPOSIT"""
@@ -892,12 +893,14 @@ class Nofications(viewsets.ViewSet):
         
         if notifDepot_seria.is_valid:
             return Response(notifDepot_seria.data)
-        return Response(notifDepot_seria.data)
+        return JsonResponse({"rapport":'non'})
     
 class SearchInfo(viewsets.ViewSet):
     @action(methods=['post'], detail=False,\
              permission_classes= [IsAuthenticated])
     def userAvailable(self, request):
+        """Gives back: Info+Solde+Historique+Notifications related
+        to the user"""
         dataReceived = request.data
         username = dataReceived.get('username')
         try:
@@ -931,3 +934,14 @@ class SearchInfo(viewsets.ViewSet):
                 # return JsonResponse({"response":"exist"}, status=200)
                 return Response(combined)
             return JsonResponse({"response":"exist"}, status=200)
+    
+    @action(methods=['get'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def askCommissions(self):
+        """Gives the actual commissions fees tables to be applied"""
+        commission_actual = CommissionForWithdrawal.objects.last()
+        commission_actual_serializer = CommissionSeria(commission_actual)
+
+        if commission_actual_serializer.is_valid:
+            return Response(commission_actual_serializer.data)
+        return JsonResponse({"rapport":'non'})
