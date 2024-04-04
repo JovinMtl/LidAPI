@@ -25,6 +25,8 @@ class Retraits(admin.ModelAdmin):
 class SoldeAdmin(admin.ModelAdmin):
     readonly_fields = ('owner',)
 
+class InvestMade(admin.ModelAdmin):
+    readonly_fields = ('link_to_approve', 'code', 'approved',)
 
 # Register your models here.
 
@@ -36,7 +38,7 @@ class SoldeAdmin(admin.ModelAdmin):
 # admin.site.register(Trade)
 admin.site.register(DepotPreuve, DepotPreuveAdmin)
 admin.site.register(RetraitLives, Retraits)
-admin.site.register(InvestmentsMade)
+admin.site.register(InvestmentsMade, InvestMade)
 admin.site.register(InterestRateForInvestment)
 # admin.site.register(Solde, SoldeAdmin)
 admin.site.register(Solde)

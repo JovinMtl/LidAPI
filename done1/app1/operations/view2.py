@@ -17,7 +17,7 @@ from django.shortcuts import get_object_or_404
 # from rest_framework.authtoken.models import Token
 from django.http import request as requeste
 # from django.db.models.query import QuerySet.DoesNotExist
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.utils import timezone
 from functools import wraps
 import json
@@ -639,6 +639,8 @@ def workOnSoldeInve(source, destination, amount, currency, who_approved,\
         # responseOperation = 200
         if responseOperation == 200:
             invest_objet.code = responseCode
+            invest_objet.date_deadline = datetime.now() + \
+                  timedelta(days=(number*30))
             destination.save()
             source.save()
             invest_objet.save()
@@ -876,8 +878,6 @@ class InvestmentsOperations(viewsets.ViewSet):
     def approveInvest(self,request, pk):
         selected_investment = InvestmentsMade.objects.get(pk=pk)
         if not selected_investment.approved:
-            # print("The selected investment is : ", selected_investment,\
-                #   request)
             # Calling a function that manages the Assignment
             investor = User.objects.get(username=selected_investment.owner)
             company_investment = User.objects.get(username='INVESTISSEMENT')
@@ -888,16 +888,16 @@ class InvestmentsOperations(viewsets.ViewSet):
                             destination=store_investment, \
                             amount=selected_investment.capital, \
                             currency=selected_investment.currency, \
-                            who_approved=str(request.user.username), \
+                            who_approved=str(request.user), \
                             number=selected_investment.duree,\
                             invest_objet=selected_investment, \
                             motif="Investissement",)
             
-            # selected_investment.approved = True
-            # selected_investment.who_approved = str(request.user)
-            # selected_investment.date_approved = timezone.now()
+            selected_investment.approved = True
+            selected_investment.who_approved = str(request.user)
+            selected_investment.date_approved = timezone.now()
             # print("The sender is : ", request.user)
-            # selected_investment.save()
+            selected_investment.save()
             return JsonResponse({"c'est ": f"{reponse}"})
         else:
             return JsonResponse({"This link is ": "used up"})

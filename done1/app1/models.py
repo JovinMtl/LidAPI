@@ -152,8 +152,7 @@ class InvestmentsMade(models.Model):
     # interest = (taux / 100) * capital.value * (duree/12) //simple
     date_submitted = models.DateTimeField(default=datetime.now())
     date_approved = models.DateTimeField(default=datetime.now())
-    date_deadline = models.DateTimeField(default=None)
-    date_deadline = models.DateField(default=None)
+    date_deadline = models.DateField(default=datetime.now())
     # owner = models.ForeignKey(User, on_delete=models.CASCADE, \
     #                           related_name="The_one_who_initiated")
     owner = models.CharField(max_length=10, default="null")
@@ -164,7 +163,7 @@ class InvestmentsMade(models.Model):
                                         default='http://127.0.0.1:8002/jov/api/',\
                                         editable=False)
     approved = models.BooleanField(default=False)
-    code = models.CharField(max_length=10, default="null")
+    code = models.CharField(max_length=10, default='null')
 
 
     def __str__(self) -> str:
