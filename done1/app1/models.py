@@ -152,6 +152,8 @@ class InvestmentsMade(models.Model):
     # interest = (taux / 100) * capital.value * (duree/12) //simple
     date_submitted = models.DateTimeField(default=datetime.now())
     date_approved = models.DateTimeField(default=datetime.now())
+    date_deadline = models.DateTimeField(default=None)
+    date_deadline = models.DateField(default=None)
     # owner = models.ForeignKey(User, on_delete=models.CASCADE, \
     #                           related_name="The_one_who_initiated")
     owner = models.CharField(max_length=10, default="null")
@@ -162,6 +164,7 @@ class InvestmentsMade(models.Model):
                                         default='http://127.0.0.1:8002/jov/api/',\
                                         editable=False)
     approved = models.BooleanField(default=False)
+    code = models.CharField(max_length=10, default="null")
 
 
     def __str__(self) -> str:
@@ -169,9 +172,22 @@ class InvestmentsMade(models.Model):
                    {self.duree}mois,{self.interest},\
                       {str(self.date_submitted)[:16]}.")
 
+class InterestRateForInvestment(models.Model):
+    """THis one will store the interest rate we prove for  
+    investments placed by investors. """
+    duree = models.CharField(max_length=8, default='1 mois')
+    number_month = models.IntegerField(max_length=15, default=1)
+    taux = models.FloatField(max_length=20, default=0)
+    date_approved = models.DateTimeField(default=datetime.now())
+    who_approved = models.CharField(max_length=15, default="null")
+
+    def __str__(self) -> str:
+        return f"Invest for {self.taux}% on {self.duree}. # {(str(self.date_approved))[:11]}"
+
+
 class Solde(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
-    # owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    # owner = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     usdt = models.FloatField(help_text="Le solde actuel en usdt",\
                               default=0)
     usd = models.FloatField(help_text="Le solde actuel en US Dollar",\

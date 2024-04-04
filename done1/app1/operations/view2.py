@@ -27,7 +27,8 @@ from ..serializers import InveSeria, DepoSeria, SoldeSeria, OperationSeria,\
                             BasicInfoSeria, RetraiSeria, CommissionSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
-                          Solde, OperationStore, CommissionForWithdrawal
+                          Solde, OperationStore, CommissionForWithdrawal,\
+                          InterestRateForInvestment
 
 from ..lumi.client_Lumi import LumiRequest 
 from ..lumi.login import UserBrowising
@@ -549,6 +550,8 @@ class UserManViewset(viewsets.ViewSet):
 ## Global Functions
 def writeOperation(code, source, destination, amount, currency,\
                       who_approved, motif='Depot', charge=0):
+    """THis one is responsible for recording every action approved
+    by the admin"""
     newOperation = OperationStore.objects.create()
     newOperation.code = code
     newOperation.source = source
@@ -602,6 +605,49 @@ def workOnSolde(source, destination, amount, currency, who_approved,\
             return 203
     else :
         return 204
+
+def workOnSoldeInve(source, destination, amount, currency, who_approved,\
+                 number, invest_objet, motif='Investissement'):
+    """THis is for DEPOSIT"""
+    lower_currency = currency.lower()  # is sent from Vue3 in uppercase
+    
+    if amount > 0 and (getattr(source, lower_currency) > amount):
+
+        try:
+            invest_plan = \
+                InterestRateForInvestment.objects.get(number_month=number)
+        except  InterestRateForInvestment.DoesNotExist:
+            return f"That plan of {number} months does not exist."
+        else:
+            taux = invest_plan.taux
+            interest = (taux / 100) * amount * (number/12) #simple
+            accumulated = amount + interest
+        
+        source_value = (getattr(source, lower_currency)) - amount
+        
+        setattr(source, lower_currency, source_value)
+        setattr(destination, lower_currency, accumulated)
+
+        print("The source sent is :", source.owner.username)
+
+        responseCode = GenerateCode().giveCode()
+        print("The new Code generated is : ", responseCode)
+        responseOperation = writeOperation(code=responseCode, source=source.owner.username,\
+                        destination=destination.owner.username, amount=amount, \
+                       currency=currency,motif=motif, who_approved=who_approved, \
+                        )
+        # responseOperation = 200
+        if responseOperation == 200:
+            invest_objet.code = responseCode
+            destination.save()
+            source.save()
+            invest_objet.save()
+            return 200
+        else:
+            return 203
+    else :
+        return 204
+
     
 def infoUser(user):
     """This is to return the gathered basic infos related to the user"""
@@ -830,14 +876,29 @@ class InvestmentsOperations(viewsets.ViewSet):
     def approveInvest(self,request, pk):
         selected_investment = InvestmentsMade.objects.get(pk=pk)
         if not selected_investment.approved:
-            selected_investment.approved = True
-            selected_investment.who_approved = str(request.user)
-            selected_investment.date_approved = timezone.now()
-            print("The sender is : ", request.user)
             # print("The selected investment is : ", selected_investment,\
                 #   request)
             # Calling a function that manages the Assignment
-            selected_investment.save()
+            investor = User.objects.get(username=selected_investment.owner)
+            company_investment = User.objects.get(username='INVESTISSEMENT')
+            solde_invester = Solde.objects.get(owner=investor)
+            store_investment = Solde.objects.get(owner=company_investment)
+            
+            reponse = workOnSoldeInve(source=solde_invester, \
+                            destination=store_investment, \
+                            amount=selected_investment.capital, \
+                            currency=selected_investment.currency, \
+                            who_approved=str(request.user.username), \
+                            number=selected_investment.duree,\
+                            invest_objet=selected_investment, \
+                            motif="Investissement",)
+            
+            # selected_investment.approved = True
+            # selected_investment.who_approved = str(request.user)
+            # selected_investment.date_approved = timezone.now()
+            # print("The sender is : ", request.user)
+            # selected_investment.save()
+            return JsonResponse({"c'est ": f"{reponse}"})
         else:
             return JsonResponse({"This link is ": "used up"})
         return JsonResponse({"The things are well ": "terminated"})
