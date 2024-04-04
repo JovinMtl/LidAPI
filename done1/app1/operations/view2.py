@@ -1034,3 +1034,14 @@ class SearchInfo(viewsets.ViewSet):
         if commission_actual_serializer.is_valid:
             return Response(commission_actual_serializer.data)
         return JsonResponse({"rapport":'non'})
+
+# class FatherUser(viewsets.ViewSet):
+#     """This is for giving birth of the new user, updating"""
+#     @action(methods=['post'], detail=False,\
+#              permission_classes= [IsAuthenticated])
+#     def addUser(self, request):
+#         data_sent =request.data
+
+class FatherUser(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSeriazer

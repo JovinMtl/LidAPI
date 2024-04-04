@@ -16,7 +16,7 @@ from .operations.view2 import RequeWithdrwawViewSet, ManageUser,\
                                 UserManViewset
 from .operations.view2 import DepotOperations, RetraitOperations, \
                               InvestmentsOperations, SoldeOperations,\
-                              Nofications, SearchInfo
+                              Nofications, SearchInfo, FatherUser
 
 
 # user_list = UserViewSet.as_view({'get': 'list'})
@@ -32,6 +32,7 @@ router.register(r'api/invest', InvestmentsOperations, basename='invest')
 router.register(r'api/solde', SoldeOperations, basename='solde')
 router.register(r'api/notif', Nofications, basename='notif')
 router.register(r'api/check', SearchInfo, basename='check')
+router.register(r'api/fuser', FatherUser, basename='father-user')
 # router.register(r'api/reque/', RequeViewSet, basename='reque' )
 
 urlpatterns = [
