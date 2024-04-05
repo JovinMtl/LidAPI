@@ -1039,14 +1039,13 @@ class SearchInfo(viewsets.ViewSet):
     def usernameExist(self, request):
         sent_data = request.data
         print(f"The sent username is : {sent_data}")
-        return JsonResponse({"usernameExists": 1}, status=201)
+        return JsonResponse({"rapport": 1}, status=201)
 
-    @action(methods=['post'], detail=False,\
-             permission_classes= [IsAuthenticated])
+    @action(methods=['post'], detail=False)
     def emailExist(self, request):
         sent_data = request.data
         print(f"The sent email is : {sent_data}")
-        return JsonResponse({"emailExists": 1}, status=200)
+        return JsonResponse({"rapport": 1}, status=200)
 
 
 
