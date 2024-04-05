@@ -1034,6 +1034,21 @@ class SearchInfo(viewsets.ViewSet):
         if commission_actual_serializer.is_valid:
             return Response(commission_actual_serializer.data)
         return JsonResponse({"rapport":'non'})
+    
+    @action(methods=['post'], detail=False)
+    def usernameExist(self, request):
+        sent_data = request.data
+        print(f"The sent username is : {sent_data}")
+        return JsonResponse({"usernameExists": 1}, status=200)
+
+    @action(methods=['post'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def emailExist(self, request):
+        sent_data = request.data
+        print(f"The sent email is : {sent_data}")
+        return JsonResponse({"emailExists": 1}, status=200)
+
+
 
 # class FatherUser(viewsets.ViewSet):
 #     """This is for giving birth of the new user, updating"""
