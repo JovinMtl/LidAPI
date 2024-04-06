@@ -1066,20 +1066,12 @@ class FatherUser(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False,)
     def poolUser(self, request):
         sent_data =request.data
-        # data = {key: value for key, value in request.data.items()}
-        # print(f"The sent username is : {sent_data}")
-        code = GenerateCode(high=6)
+        code = GenerateCode(high=6) #will generate code of 6 caracters
         code_pool = code.gene()
         data = ['','']
         data[0] = sent_data
         data[1] = code_pool
         saved_pool = self._addPool(data=data)
-        # pool_user_serializer = PoolUserSeria(saved_pool)
-        # if pool_user_serializer.is_valid:
-        #     print(f"The collected data is : {(saved_pool.__dict__)}")
-        #     print(f"The serialized: { pool_user_serializer.data}")
-        #     print(f"The sent username : {data[0].get('username')}\
-        #           or : {saved_pool.username}")
 
         if saved_pool:
             print(f"The OPeration returned code: {saved_pool}")
@@ -1127,6 +1119,7 @@ class FatherUser(viewsets.ModelViewSet):
         if new_pool.username and new_pool.password and\
             new_pool.email and new_pool.phone and\
             new_pool.code:
+            new_pool.save()
             return new_pool.code
         else:
             return 0
