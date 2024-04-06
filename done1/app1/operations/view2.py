@@ -1069,11 +1069,12 @@ class FatherUser(viewsets.ModelViewSet):
         # print(f"The sent username is : {sent_data}")
         code = GenerateCode(high=6)
         code_pool = code.gene()
-        data = []
+        data = ['','']
         data[0] = sent_data
         data[1] = code_pool
         reponse = self._addPool(data=data)
-        print(f"The username: {sent_data['username']}")
+        print(f"The data: {sent_data}")
+        print(f"The code pool is : {code_pool}")
         return JsonResponse({"rapport": 1}, status=201)
     
     def is_valid_email(email):
