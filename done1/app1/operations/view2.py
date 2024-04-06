@@ -1084,17 +1084,36 @@ class FatherUser(viewsets.ModelViewSet):
             return True
         except ValidationError:
             return False
+        
+    def is_gt_seven(self, pwd):
+        if len(pwd) > 7:
+            return True
+        else :
+            return False
+        
     def _addPool(self, data):
+        """Creates a new PoolUser instance and populates it"""
         new_pool = PoolUser.objects.create()
+
         new_pool.code = data[1]
-        new_pool.username = data[0].get('username')
-        new_pool.password = data[0].get('password')
+
+        username = self.is_gt_seven(data[0].get('username'))
+        if username:
+            new_pool.username = data[0].get('username')
+
+        password = self.is_gt_seven(data[0].get('password'))
+        if password:
+            new_pool.password = data[0].get('password')
+
         email = self.is_valid_email(data[0].get('email'))
         if email:
             new_pool.email = data[0].get('email')
-        new_pool.phone = data[0].get('phone')
+
+        phone = self.is_gt_seven(data[0].get('phone'))
+        if phone:
+            new_pool.phone = data[0].get('phone')
+
         new_pool.date_submitted = timezone.now()
 
         return new_pool
-        pass
 
