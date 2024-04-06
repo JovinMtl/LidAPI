@@ -1077,7 +1077,8 @@ class FatherUser(viewsets.ModelViewSet):
         if saved_pool:
             mail_data = {}
             mail_data['code'] = saved_pool.code
-            mail_data['email'] = saved_pool.email
+            # mail_data['email'] = saved_pool.email
+            mail_data['email'] = 'nsanzumukizath@gmail.com'
             print(f"The OPeration returned code: {saved_pool}")
             reponse = self._send_mail(mail_data)
             return JsonResponse({"rapport": 1, "code": saved_pool}, status=200)
@@ -1133,7 +1134,8 @@ class FatherUser(viewsets.ModelViewSet):
     def _send_mail(self, data):
         subject = 'Your account activation'
         message = f"Please use this code: {data.get('code')}"
-        from_email = 'nsanzumukizath@gmail.com'
+        # from_email = 'nsanzumukizath@gmail.com'
+        from_email = 'jovintry@gmail.com'
         # recipient_list = ['jovintry@gmail.com',]
         recipient_list = [data['email'],]
 
