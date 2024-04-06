@@ -26,7 +26,8 @@ import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
 from ..serializers import InveSeria, DepoSeria, SoldeSeria, OperationSeria,\
-                            BasicInfoSeria, RetraiSeria, CommissionSeria
+                            BasicInfoSeria, RetraiSeria, CommissionSeria, \
+                            PoolUserSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
                     Solde, OperationStore, CommissionForWithdrawal,\
@@ -1072,10 +1073,10 @@ class FatherUser(viewsets.ModelViewSet):
         data = ['','']
         data[0] = sent_data
         data[1] = code_pool
-        reponse = self._addPool(data=data)
-        # print(f"The data: {sent_data}")
-        # print(f"The code pool is : {code_pool}")
-        print(f"The collected data is : {(reponse.__dict__)}")
+        saved_pool = self._addPool(data=data)
+        pool_user_serializer = PoolUserSeria(saved_pool)
+        if pool_user_serializer.is_valid:
+            print(f"The collected data is : {(saved_pool.__dict__)}")
         return JsonResponse({"rapport": 1}, status=201)
     
     def is_valid_email(self, email):
