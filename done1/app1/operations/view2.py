@@ -1078,6 +1078,8 @@ class FatherUser(viewsets.ModelViewSet):
         if pool_user_serializer.is_valid:
             print(f"The collected data is : {(saved_pool.__dict__)}")
             print(f"The serialized: { pool_user_serializer.data}")
+            print(f"The sent username : {data[0].get('username')}\
+                  or : {saved_pool.username}")
         return JsonResponse({"rapport": 1}, status=201)
     
     def is_valid_email(self, email):
@@ -1099,8 +1101,7 @@ class FatherUser(viewsets.ModelViewSet):
 
         new_pool.code = data[1]
 
-        username = self.is_gt_seven(data[0].get('username'))
-        if username:
+        if len(str(data[0].get('username'))) > 1:
             new_pool.username = data[0].get('username')
 
         password = self.is_gt_seven(data[0].get('password'))
