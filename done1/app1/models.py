@@ -253,11 +253,11 @@ class CommissionForWithdrawal(models.Model):
 
 
 class PoolUser(models.Model):
-    code = models.CharField(max_length=8, default='null')
-    username = models.CharField(max_length=15, default="null")
-    password = models.CharField(max_length=25, default="null")
-    email = models.CharField(max_length=25, default="null")
-    phone = models.CharField(max_length=15, default="null")
+    code = models.CharField(max_length=8)
+    username = models.CharField(max_length=15)
+    password = models.CharField(max_length=25)
+    email = models.CharField(max_length=25)
+    phone = models.CharField(max_length=15)
     date_submitted = models.DateTimeField(default=datetime.now())
     date_approved = models.DateTimeField(default=datetime.now())
     activated = models.BooleanField(default=False)

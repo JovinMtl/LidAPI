@@ -1078,7 +1078,7 @@ class FatherUser(viewsets.ModelViewSet):
         print(f"The collected data is : {(reponse.__dict__)}")
         return JsonResponse({"rapport": 1}, status=201)
     
-    def is_valid_email(email):
+    def is_valid_email(self, email):
         try:
             validate_email(email)
             return True
@@ -1089,7 +1089,9 @@ class FatherUser(viewsets.ModelViewSet):
         new_pool.code = data[1]
         new_pool.username = data[0].get('username')
         new_pool.password = data[0].get('password')
-        new_pool.email = data[0].get('email')
+        email = self.is_valid_email(data[0].get('email'))
+        if email:
+            new_pool.email = data[0].get('email')
         new_pool.phone = data[0].get('phone')
         new_pool.date_submitted = timezone.now()
 
