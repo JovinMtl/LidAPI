@@ -28,6 +28,11 @@ class SoldeAdmin(admin.ModelAdmin):
 class InvestMade(admin.ModelAdmin):
     readonly_fields = ('link_to_approve', 'code', 'approved',)
 
+class PoolUserReadOnly(admin.ModelAdmin):
+    readonly_fields = ('code', 'username', 'password',\
+                       'email', 'phone', 'date_submitted',\
+                          'date_approved', 'activated')
+
 # Register your models here.
 
 # admin.site.register(Person)
@@ -44,4 +49,4 @@ admin.site.register(InterestRateForInvestment)
 admin.site.register(Solde)
 admin.site.register(OperationStore, OperationStoreAdmin)
 admin.site.register(CommissionForWithdrawal)
-admin.site.register(PoolUser)
+admin.site.register(PoolUser, PoolUserReadOnly)
