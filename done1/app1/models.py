@@ -250,3 +250,16 @@ class CommissionForWithdrawal(models.Model):
 
     def __str__(self) -> str:
         return f"Commission on {(str(self.date_approved))[:11]}"
+
+
+class PoolUser(models.Model):
+    code = models.CharField(max_length=8, default='null')
+    username = models.CharField(max_length=15, default="null")
+    password = models.CharField(max_length=25, default="null")
+    email = models.CharField(max_length=25, default="null")
+    phone = models.CharField(max_length=15, default="null")
+    date_submitted = models.DateTimeField(default=datetime.now())
+    date_approved = models.DateTimeField(default=datetime.now())
+    activated = models.BooleanField(default=False)
+
+
