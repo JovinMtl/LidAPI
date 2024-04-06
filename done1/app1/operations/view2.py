@@ -1075,7 +1075,7 @@ class FatherUser(viewsets.ModelViewSet):
         reponse = self._addPool(data=data)
         # print(f"The data: {sent_data}")
         # print(f"The code pool is : {code_pool}")
-        print(f"The collected data is : {reponse}")
+        print(f"The collected data is : {(reponse.__dict__)}")
         return JsonResponse({"rapport": 1}, status=201)
     
     def is_valid_email(email):
