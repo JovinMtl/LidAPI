@@ -1077,6 +1077,7 @@ class FatherUser(viewsets.ModelViewSet):
         pool_user_serializer = PoolUserSeria(saved_pool)
         if pool_user_serializer.is_valid:
             print(f"The collected data is : {(saved_pool.__dict__)}")
+            print(f"The serialized: { pool_user_serializer.data}")
         return JsonResponse({"rapport": 1}, status=201)
     
     def is_valid_email(self, email):
