@@ -262,4 +262,9 @@ class PoolUser(models.Model):
     date_approved = models.DateTimeField(default=datetime.now())
     activated = models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        return f"'{self.username}' en attente depuis \
+            {(str(self.date_submitted))[:10]}, \
+            {(str(self.date_submitted))[12:16]}."
+
 
