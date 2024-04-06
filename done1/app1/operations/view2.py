@@ -29,8 +29,8 @@ from ..serializers import InveSeria, DepoSeria, SoldeSeria, OperationSeria,\
                             BasicInfoSeria, RetraiSeria, CommissionSeria
 from ..models import Requeste, PorteFeuille, Recharge, Differente,\
                     Trade, DepotPreuve, RetraitLives, InvestmentsMade,\
-                          Solde, OperationStore, CommissionForWithdrawal,\
-                          InterestRateForInvestment
+                    Solde, OperationStore, CommissionForWithdrawal,\
+                    InterestRateForInvestment, PoolUser
 
 from ..lumi.client_Lumi import LumiRequest 
 from ..lumi.login import UserBrowising
@@ -1073,8 +1073,9 @@ class FatherUser(viewsets.ModelViewSet):
         data[0] = sent_data
         data[1] = code_pool
         reponse = self._addPool(data=data)
-        print(f"The data: {sent_data}")
-        print(f"The code pool is : {code_pool}")
+        # print(f"The data: {sent_data}")
+        # print(f"The code pool is : {code_pool}")
+        print(f"The collected data is : {reponse}")
         return JsonResponse({"rapport": 1}, status=201)
     
     def is_valid_email(email):
@@ -1084,6 +1085,14 @@ class FatherUser(viewsets.ModelViewSet):
         except ValidationError:
             return False
     def _addPool(self, data):
-        new_pool = ''
+        new_pool = PoolUser.objects.create()
+        new_pool.code = data[1]
+        new_pool.username = data[0].get('username')
+        new_pool.password = data[0].get('password')
+        new_pool.email = data[0].get('email')
+        new_pool.phone = data[0].get('phone')
+        new_pool.date_submitted = timezone.now()
+
+        return new_pool
         pass
 
