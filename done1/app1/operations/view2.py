@@ -1115,6 +1115,7 @@ class FatherUser(viewsets.ModelViewSet):
             new_pool.phone = data[0].get('phone')
 
         new_pool.date_submitted = timezone.now()
+        new_pool.date_approved = new_pool.date_submitted
 
         if new_pool.username and new_pool.password and\
             new_pool.email and new_pool.phone and\
