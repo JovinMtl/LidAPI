@@ -1065,9 +1065,15 @@ class FatherUser(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False,)
     def poolUser(self, request):
         sent_data =request.data
-        data = {key: value for key, value in request.data.items()}
-        print(f"The sent username is : {sent_data}")
-        print(f"The decoded : {data}")
+        # data = {key: value for key, value in request.data.items()}
+        # print(f"The sent username is : {sent_data}")
+        code = GenerateCode(high=6)
+        code_pool = code.gene()
+        data = []
+        data[0] = sent_data
+        data[1] = code_pool
+        reponse = self._addPool(data=data)
+        print(f"The username: {sent_data['username']}")
         return JsonResponse({"rapport": 1}, status=201)
     
     def is_valid_email(email):
@@ -1076,4 +1082,7 @@ class FatherUser(viewsets.ModelViewSet):
             return True
         except ValidationError:
             return False
+    def _addPool(self, data):
+        new_pool = ''
+        pass
 
