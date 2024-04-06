@@ -20,6 +20,8 @@ from django.http import request as requeste
 from datetime import datetime, timedelta
 from django.utils import timezone
 from functools import wraps
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
@@ -1059,3 +1061,19 @@ class SearchInfo(viewsets.ViewSet):
 class FatherUser(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSeriazer
+
+    @action(methods=['post'], detail=False,)
+    def poolUser(self, request):
+        sent_data =request.data
+        data = {key: value for key, value in request.data.items()}
+        print(f"The sent username is : {sent_data}")
+        print(f"The decoded : {data}")
+        return JsonResponse({"rapport": 1}, status=201)
+    
+    def is_valid_email(email):
+        try:
+            validate_email(email)
+            return True
+        except ValidationError:
+            return False
+
