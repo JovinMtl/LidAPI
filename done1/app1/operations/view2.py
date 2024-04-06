@@ -22,6 +22,7 @@ from django.utils import timezone
 from functools import wraps
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 import json
 
 from ..serializers import RequeSeria, UserSeriazer, PorteSeria
@@ -1074,7 +1075,11 @@ class FatherUser(viewsets.ModelViewSet):
         saved_pool = self._addPool(data=data)
 
         if saved_pool:
+            mail_data = {}
+            mail_data['code'] = saved_pool.code
+            mail_data['email'] = saved_pool.email
             print(f"The OPeration returned code: {saved_pool}")
+            reponse = self._send_mail(mail_data)
             return JsonResponse({"rapport": 1, "code": saved_pool}, status=200)
         else:
             print(f"The Operation failed with code: {saved_pool}")
@@ -1124,4 +1129,13 @@ class FatherUser(viewsets.ModelViewSet):
             return new_pool.code
         else:
             return 0
+        
+    def _send_mail(self, data):
+        subject = 'Your account activation'
+        message = f"Please use this code: {data.get('code')}"
+        from_email = 'nsanzumukizath@gmail.com'
+        # recipient_list = ['jovintry@gmail.com',]
+        recipient_list = [data['email'],]
+
+        send_mail(subject, message, from_email, recipient_list)
 
