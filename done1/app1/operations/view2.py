@@ -1074,13 +1074,19 @@ class FatherUser(viewsets.ModelViewSet):
         data[0] = sent_data
         data[1] = code_pool
         saved_pool = self._addPool(data=data)
-        pool_user_serializer = PoolUserSeria(saved_pool)
-        if pool_user_serializer.is_valid:
-            print(f"The collected data is : {(saved_pool.__dict__)}")
-            print(f"The serialized: { pool_user_serializer.data}")
-            print(f"The sent username : {data[0].get('username')}\
-                  or : {saved_pool.username}")
-        return JsonResponse({"rapport": 1}, status=201)
+        # pool_user_serializer = PoolUserSeria(saved_pool)
+        # if pool_user_serializer.is_valid:
+        #     print(f"The collected data is : {(saved_pool.__dict__)}")
+        #     print(f"The serialized: { pool_user_serializer.data}")
+        #     print(f"The sent username : {data[0].get('username')}\
+        #           or : {saved_pool.username}")
+
+        if saved_pool:
+            print(f"The OPeration returned code: {saved_pool}")
+            return JsonResponse({"rapport": 1, "code": saved_pool}, status=200)
+        else:
+            print(f"The Operation failed with code: {saved_pool}")
+            return JsonResponse({"rapport": 2, "code": saved_pool}, status=201)
     
     def is_valid_email(self, email):
         try:
@@ -1118,5 +1124,10 @@ class FatherUser(viewsets.ModelViewSet):
 
         new_pool.date_submitted = timezone.now()
 
-        return new_pool
+        if new_pool.username and new_pool.password and\
+            new_pool.email and new_pool.phone and\
+            new_pool.code:
+            return new_pool.code
+        else:
+            return 0
 
