@@ -678,8 +678,32 @@ def infoUser(user):
         return basic_info_serialized.data #when things went well
 
     return 'infoUser' #when things didn't go well
- 
 
+def cheMail(email:str):
+    """THis check that the given email is used by any registered User"""
+    
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return 404
+    else:
+        return 200
+
+def cheUsername(username:str)-> int:
+    """THis check that the given username is used by any registered User"""
+    
+    # user = get_object_or_404(User.objects.all(), username=username)
+    # if user:
+    #     return 200 #when found it
+    # else :
+    #     return 404 #when didn't find it
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return 404
+    else:
+        return 200
+    
 class DepotOperations(viewsets.ViewSet):
     # company_solde = Solde.objects.get(pk=1)
 
@@ -1042,14 +1066,22 @@ class SearchInfo(viewsets.ViewSet):
     @action(methods=['post'], detail=False)
     def usernameExist(self, request):
         sent_data = request.data
-        print(f"The sent username is : {sent_data}")
-        return JsonResponse({"rapport": 1}, status=201)
+        username = sent_data.get('username')
+        ch_username = cheUsername(username=username)
+        if ch_username is 200:
+            return JsonResponse({"rapport": 1}, status=200)
+        else:
+            return JsonResponse({"rapport": 0}, status=201)
 
     @action(methods=['post'], detail=False)
     def emailExist(self, request):
         sent_data = request.data
-        print(f"The sent email is : {sent_data}")
-        return JsonResponse({"rapport": 1}, status=200)
+        email = sent_data.get('email')
+        ch_email = cheMail(email=email)
+        if ch_email is 200:
+            return JsonResponse({"rapport": 1}, status=200)
+        else:
+            return JsonResponse({"rapport": 0}, status=201)
 
 
 
@@ -1067,6 +1099,16 @@ class FatherUser(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False,)
     def poolUser(self, request):
         sent_data =request.data
+        username = sent_data.get('username')
+        email = sent_data.get('email')
+        ch_username = cheUsername(username=username)
+        ch_email = cheMail(email=email)
+        if ch_username is 200:
+            print(f" used: {ch_username},")
+            return JsonResponse({"Ce username ": 'existe'})
+        if ch_email is 200:
+            return JsonResponse({"Cet email ": 'existe'})
+        
         code = GenerateCode(high=6) #will generate code of 6 caracters
         code_pool = code.gene()
         data = ['','']
@@ -1076,14 +1118,14 @@ class FatherUser(viewsets.ModelViewSet):
 
         if saved_pool:
             mail_data = {}
-            mail_data['code'] = saved_pool.code
+            mail_data['code'] = code_pool
             # mail_data['email'] = saved_pool.email
             mail_data['email'] = 'nsanzumukizath@gmail.com'
-            print(f"The OPeration returned code: {saved_pool}")
-            reponse = self._send_mail(mail_data)
+            # print(f"The OPeration returned code: {saved_pool}")
+            # self._send_mail(mail_data) #sending email to the new User
             return JsonResponse({"rapport": 1, "code": saved_pool}, status=200)
         else:
-            print(f"The Operation failed with code: {saved_pool}")
+            # print(f"The Operation failed with code: {saved_pool}")
             return JsonResponse({"rapport": 2, "code": saved_pool}, status=201)
     
     def is_valid_email(self, email):
