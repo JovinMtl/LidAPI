@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from .models import Person, Requeste, PorteFeuille
 
 from .models import InvestmentsMade, DepotPreuve, Solde, OperationStore,\
-                    RetraitLives, CommissionForWithdrawal
+                    RetraitLives, CommissionForWithdrawal, PoolUser
 
 
 
@@ -68,3 +68,9 @@ class BasicInfoSeria(serializers.Serializer):
     phonenumber = serializers.CharField(max_length=15, default=None)
     email = serializers.EmailField(max_length=20, default=None)
     level = serializers.IntegerField(default=0)
+
+
+class PoolUserSeria(serializers.ModelSerializer):
+    class Meta:
+        model = PoolUser
+        fields = '__all__'
