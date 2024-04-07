@@ -1089,6 +1089,8 @@ class SearchInfo(viewsets.ViewSet):
         user = request.user
         print(f"The user requesting is : {user}")
 
+        return JsonResponse({"rapport": 1})
+
 
 
 # class FatherUser(viewsets.ViewSet):
