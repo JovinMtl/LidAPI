@@ -1083,7 +1083,7 @@ class SearchInfo(viewsets.ViewSet):
         else:
             return JsonResponse({"rapport": 0}, status=201)
     
-    @action(methods=['post'], detail=False,\
+    @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
     def askcate(self, request):
         user = request.user
