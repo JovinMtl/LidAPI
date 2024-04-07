@@ -1082,6 +1082,12 @@ class SearchInfo(viewsets.ViewSet):
             return JsonResponse({"rapport": 1}, status=200)
         else:
             return JsonResponse({"rapport": 0}, status=201)
+    
+    @action(methods=['post'], detail=False,\
+             permission_classes= [IsAuthenticated])
+    def askcate(self, request):
+        user = request.user
+        print(f"The user requesting is : {user}")
 
 
 
