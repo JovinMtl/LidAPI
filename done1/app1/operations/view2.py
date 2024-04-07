@@ -1086,10 +1086,9 @@ class SearchInfo(viewsets.ViewSet):
     @action(methods=['get'], detail=False,\
              permission_classes= [IsAuthenticated])
     def askcate(self, request):
+        """Returning whether the user is Staff or Not"""
         user = request.user
-        print(f"The user requesting is : {user}")
-
-        return JsonResponse({"rapport": 1})
+        return JsonResponse({"rapport": user.is_staff})
 
 
 
